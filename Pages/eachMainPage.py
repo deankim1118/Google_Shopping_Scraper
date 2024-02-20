@@ -38,7 +38,8 @@ class EachMainPage():
         page_total_reviews = self.driver.find_element(*EachMainPage.pageTotalReviews).text.split(" ")[0]
         return page_total_reviews
     def getPageFeatures(self):
-        page_Features = [f.text.strip() for f in self.driver.find_elements(*EachMainPage.pageFeatures)[:5]]
+        #page_Features = [f.text.strip() for f in self.driver.find_elements(*EachMainPage.pageFeatures)[:7]]
+        page_Features = [f.text.strip() for f in self.driver.find_elements(*EachMainPage.pageFeatures)]
         # assert page_Features is not None, "Can't get pageFeatures Locator"
         return page_Features
     def getPageSellers(self):
