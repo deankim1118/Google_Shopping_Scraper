@@ -3,6 +3,10 @@ from textblob import TextBlob
 from collections import defaultdict
 import re
 import numpy as np
+# import text_clean
+# from PIL import Image
+# from wordcloud import WordCloud
+# import matplotlib.pyplot as plt
  
 class DataAnalysis():
     def __init__(self, filePath = str) -> None:
@@ -219,6 +223,19 @@ class DataAnalysis():
         # top_5_scored_products = product_scores.sort_values(by='score', ascending=False).head(10)
         top_10_products_log.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
     
+    
+    # def wordCloudReviews(self):
+    #         data_path = './results/baby_stroller_V2.csv'
+    #         stroller_data = pd.read_csv(data_path)
+
+    #         # 각 고유 제품에 대한 리뷰들을 추출합니다.
+    #         reviews_by_product = stroller_data.groupby('product')['reviews'].apply(lambda x: ' '.join(x)).reset_index()
+    #         text_reviews = text_clean.clean(reviews_by_product['reviews'][0])
+    #         # 결과를 출력합니다.
+    #         #print(len(text_reviews))
+    #         wc = WordCloud().generate(text_reviews)
+    #         plt.imshow(wc)
+    #         plt.show()
             
     def printTest(self):
         df = pd.read_csv("./results/baby_stroller_V2.csv")
@@ -228,7 +245,7 @@ class DataAnalysis():
 dataAnalysis = DataAnalysis()
 # dataAnalysis.preprocessor()
 # dataAnalysis.printTest()
-df = pd.read_csv("./results/baby_stroller_MainFeatures.csv")
-dataAnalysis.calScore(df)
+# df = pd.read_csv("./results/baby_stroller_MainFeatures.csv")
+dataAnalysis.wordCloudReviews()
 #dataAnalysis.bestTenProducts()
 
