@@ -71,7 +71,7 @@ class ReviewPage:
     def scrollTo(self):
         ActionChains(self.driver).scroll_to_element(self.getPageFooter()).perform()
     ######## Get Reviews and Ratings ########
-    More_BTN_Click_Count = 23
+    More_BTN_Click_Count = 1
     def getReviewContents(self):
         df_page_reviews = []
         product = self.getProductName()

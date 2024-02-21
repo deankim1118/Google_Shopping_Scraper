@@ -1,8 +1,8 @@
-from ananlyst.data_analysis import DataAnalysis
+from pages.browser import Browser
 from pages.eachMainPage import EachMainPage
 from utilites.utility import Utility
 from pages.homePage import HomePage
-from pages.browser import Browser
+from ananlyst.data_analysis import DataAnalysis
 import pandas as pd
 
 class GooggleScraper(Browser):
@@ -65,5 +65,5 @@ class GooggleScraper(Browser):
 
         #self.driver.quit()
         
-googgleScraper = GooggleScraper("baby stroller")
+googgleScraper = GooggleScraper("baby bed")
 googgleScraper.runScraper()

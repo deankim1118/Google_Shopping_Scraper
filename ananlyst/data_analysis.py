@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 from textblob import TextBlob
  
-class DataAnalysis():
+class DataAnalysis:
     def __init__(self, filePath = str) -> None:
-        # self.filePath = filePath
-        self.filePath = "./results/baby_stroller_Raw.csv"
+        self.filePath = filePath
+        # self.filePath = "./results/baby_stroller_Raw.csv"
         
     
     def preprocessor(self):      
@@ -182,5 +182,5 @@ class DataAnalysis():
         #         print(f"  - {feature}: {score:.2f}점")
         #     print("\n")
         
-dataAnalysis = DataAnalysis()
-dataAnalysis.preprocessor()
+# dataAnalysis = DataAnalysis()
+# dataAnalysis.preprocessor()

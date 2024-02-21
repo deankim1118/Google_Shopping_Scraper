@@ -8,7 +8,7 @@ import numpy as np
 # from wordcloud import WordCloud
 # import matplotlib.pyplot as plt
  
-class DataAnalysis():
+class DataAnalysis:
     def __init__(self, filePath = str) -> None:
         self.filePath = "./results/baby_stroller_Raw.csv"
         

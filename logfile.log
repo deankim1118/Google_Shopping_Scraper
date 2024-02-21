@@ -1,48 +1,19 @@
-2024-02-14 00:22:26,363 :INFO : runScraper :baby stroller is searched on Google
-2024-02-14 00:22:29,093 :INFO : runScraper :Toggled rating 4 and up
-2024-02-14 00:22:29,762 :INFO : runScraper :Got all product's URLs
-2024-02-14 00:22:29,762 :INFO : runScraper :24 of baby stroller are filtered out
-2024-02-14 00:35:20,330 :INFO : runScraper :baby stroller is searched on Google
-2024-02-14 00:35:22,897 :INFO : runScraper :Toggled rating 4 and up
-2024-02-14 00:35:23,480 :INFO : runScraper :Got all product's URLs
-2024-02-14 00:35:23,480 :INFO : runScraper :19 of baby stroller are filtered out
-2024-02-14 00:37:44,421 :INFO : runScraper :baby stroller is searched on Google
-2024-02-14 00:37:47,074 :INFO : runScraper :Toggled rating 4 and up
-2024-02-14 00:37:47,674 :INFO : runScraper :Got all product's URLs
-2024-02-14 00:37:47,674 :INFO : runScraper :18 of baby stroller are filtered out
-2024-02-14 00:39:02,805 :INFO : runScraper :baby stroller is searched on Google
-2024-02-14 00:39:21,095 :INFO : runScraper :baby stroller is searched on Google
-2024-02-14 00:39:24,350 :INFO : runScraper :Toggled rating 4 and up
-2024-02-14 00:39:24,959 :INFO : runScraper :Got all product's URLs
-2024-02-14 00:39:24,959 :INFO : runScraper :20 of baby stroller are filtered out
-2024-02-15 13:58:23,704 :INFO : runScraper :baby stroller is searched on Google
-2024-02-15 13:58:27,000 :INFO : runScraper :Toggled rating 4 and up
-2024-02-15 13:58:27,643 :INFO : runScraper :Got all product's URLs
-2024-02-15 13:58:27,643 :INFO : runScraper :22 of baby stroller are filtered out
-2024-02-15 14:00:43,246 :INFO : runScraper :baby stroller is searched on Google
-2024-02-15 14:00:46,142 :INFO : runScraper :Toggled rating 4 and up
-2024-02-15 14:00:46,768 :INFO : runScraper :Got all product's URLs
-2024-02-15 14:00:46,768 :INFO : runScraper :23 of baby stroller are filtered out
-2024-02-15 14:05:55,352 :INFO : runScraper :baby stroller is searched on Google
-2024-02-15 14:05:58,405 :INFO : runScraper :Toggled rating 4 and up
-2024-02-15 14:05:59,019 :INFO : runScraper :Got all product's URLs
-2024-02-15 14:05:59,035 :INFO : runScraper :24 of baby stroller are filtered out
-2024-02-15 14:17:46,399 :INFO : runScraper :baby stroller is searched on Google
-2024-02-15 14:17:50,106 :INFO : runScraper :Toggled rating 4 and up
-2024-02-15 14:17:50,758 :INFO : runScraper :Got all product's URLs
-2024-02-15 14:17:50,758 :INFO : runScraper :24 of baby stroller are filtered out
-2024-02-15 14:18:10,729 :INFO : runScraper :baby stroller is searched on Google
-2024-02-15 14:18:13,695 :INFO : runScraper :Toggled rating 4 and up
-2024-02-15 14:18:14,322 :INFO : runScraper :Got all product's URLs
-2024-02-15 14:18:14,337 :INFO : runScraper :24 of baby stroller are filtered out
-2024-02-15 14:18:59,920 :INFO : runScraper :baby stroller is searched on Google
-2024-02-15 14:19:02,595 :INFO : runScraper :Toggled rating 4 and up
-2024-02-15 14:19:03,245 :INFO : runScraper :Got all product's URLs
-2024-02-15 14:19:03,247 :INFO : runScraper :27 of baby stroller are filtered out
-2024-02-15 14:35:22,217 :INFO : runScraper :baby stroller is searched on Google
-2024-02-15 14:35:25,390 :INFO : runScraper :Toggled rating 4 and up
-2024-02-15 14:35:26,003 :INFO : runScraper :Got all product's URLs
-2024-02-15 14:35:26,005 :INFO : runScraper :23 of baby stroller are filtered out
-2024-02-15 14:46:01,029 :INFO : runScraper :All page is loaded
-2024-02-15 14:46:01,079 :INFO : runScraper :ALL page's details are saved on file
-2024-02-15 14:46:02,454 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-20 22:46:04,885 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 22:46:07,625 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 22:46:08,350 :INFO : runScraper :Got all product's URLs
+2024-02-20 22:46:08,354 :INFO : runScraper :14 of baby bed are filtered out
+2024-02-20 22:50:11,210 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 22:50:13,592 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 22:50:14,294 :INFO : runScraper :Got all product's URLs
+2024-02-20 22:50:14,296 :INFO : runScraper :14 of baby bed are filtered out
+2024-02-20 22:51:25,523 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 22:51:28,406 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 22:51:29,111 :INFO : runScraper :Got all product's URLs
+2024-02-20 22:51:29,126 :INFO : runScraper :16 of baby bed are filtered out
+2024-02-20 22:51:59,861 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 22:52:03,674 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 22:52:04,374 :INFO : runScraper :Got all product's URLs
+2024-02-20 22:52:04,374 :INFO : runScraper :14 of baby bed are filtered out
+2024-02-20 22:52:09,614 :INFO : runScraper :All page is loaded
+2024-02-20 22:52:09,623 :INFO : runScraper :ALL page's details are saved on file
+2024-02-20 22:52:09,664 :INFO : runScraper :ALL Data Preprocessing is done
