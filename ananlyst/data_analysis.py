@@ -13,7 +13,7 @@ class DataAnalysis:
     def preprocessor(self):      
         df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['reviews']).reset_index(drop=True)
         # 1. Set Columns that are only used
-        df_review = df_raw[['product','totalRating','totalReviews','seller','price','features','rating','reviews']]
+        df_review = df_raw[['product','url','totalRating','totalReviews','seller','price','features','rating','reviews']]
         # 2. 감성분석
         df_sentiment_analysis = self.sentimentAnalysis(df_review)
         # 3. Split Main Features and Percent of Main Features
@@ -76,7 +76,7 @@ class DataAnalysis:
         df['positive_sentiment'] = df['sentimentAnalysis'].apply(lambda x: 1 if x == 1 else 0)
 
         # 각 제품별로 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 계산
-        product_analysis = df.groupby('product').agg(
+        product_analysis = df.groupby(['product','url']).agg(
             average_total_rating=('totalRating', 'mean'),
             average_reviews=('totalReviews', 'mean'),
             average_rating=('rating', 'mean'),

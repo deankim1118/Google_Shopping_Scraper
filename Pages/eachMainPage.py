@@ -69,7 +69,7 @@ class EachMainPage():
     ###### Get Locators ########
     
     ### DataFrame = [제품이름, 평점, 평점갯수, 특징분석단어, {판매처 Top3, 가격}] 가져오기
-    def moveToEachPage(self, urlDataFrame):
+    def moveToEachPage(self, urlDataFrame, btnClickCount = 1):
         wait = Browser.wait
         df_page_details = []
         df_page_reviews = []
@@ -95,7 +95,7 @@ class EachMainPage():
             wait.until(EC.element_to_be_clickable(self.getPageAllReviews()))
             self.getPageAllReviews().click()
             
-            df_page_reviews = reviewPage.getReviewContents()
+            df_page_reviews = reviewPage.getReviewContents(More_BTN_Click_Count= btnClickCount)
             df_page_concat = pd.concat([page_detail, page_sellers, df_page_reviews], axis=1)
             df_page_details.append(df_page_concat)
             ### URL 이 바뀔 때까지 기다려라

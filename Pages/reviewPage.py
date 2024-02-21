@@ -71,12 +71,13 @@ class ReviewPage:
     def scrollTo(self):
         ActionChains(self.driver).scroll_to_element(self.getPageFooter()).perform()
     ######## Get Reviews and Ratings ########
-    More_BTN_Click_Count = 23
-    def getReviewContents(self):
+    # More_BTN_Click_Count = 23
+    def getReviewContents(self, More_BTN_Click_Count):
         df_page_reviews = []
         product = self.getProductName()
         # Scroll and Click More Button
-        self.waitAndClickMore(self.wait, btnClickCount = self.More_BTN_Click_Count)
+        # self.waitAndClickMore(self.wait, btnClickCount = self.More_BTN_Click_Count)
+        self.waitAndClickMore(self.wait, btnClickCount = More_BTN_Click_Count)
         # Get review ratings and contents in the MoreReviews Page
         self.scrollTo()
         for review in self.driver.find_elements(By.CSS_SELECTOR, "div.fade-in-animate"):

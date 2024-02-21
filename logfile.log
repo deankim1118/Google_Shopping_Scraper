@@ -24,3 +24,39 @@
 2024-02-20 22:57:32,465 :INFO : runScraper :All page is loaded
 2024-02-20 22:57:32,465 :INFO : runScraper :ALL page's details are saved on file
 2024-02-20 22:57:32,501 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-20 23:05:05,163 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 23:05:08,457 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 23:05:09,126 :INFO : runScraper :Got all product's URLs
+2024-02-20 23:05:09,126 :INFO : runScraper :16 of baby bed are filtered out
+2024-02-20 23:05:14,027 :INFO : runScraper :All page is loaded
+2024-02-20 23:05:14,027 :INFO : runScraper :ALL page's details are saved on file
+2024-02-20 23:17:06,672 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 23:17:09,189 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 23:17:09,885 :INFO : runScraper :Got all product's URLs
+2024-02-20 23:17:09,885 :INFO : runScraper :16 of baby bed are filtered out
+2024-02-20 23:20:52,355 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 23:20:55,287 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 23:20:55,986 :INFO : runScraper :Got all product's URLs
+2024-02-20 23:20:55,986 :INFO : runScraper :15 of baby bed are filtered out
+2024-02-20 23:22:53,948 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 23:22:56,601 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 23:22:57,302 :INFO : runScraper :Got all product's URLs
+2024-02-20 23:22:57,302 :INFO : runScraper :16 of baby bed are filtered out
+2024-02-20 23:24:11,786 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 23:24:15,633 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 23:24:16,316 :INFO : runScraper :Got all product's URLs
+2024-02-20 23:24:16,316 :INFO : runScraper :15 of baby bed are filtered out
+2024-02-20 23:24:20,825 :INFO : runScraper :All page is loaded
+2024-02-20 23:24:20,825 :INFO : runScraper :ALL page's details are saved on file
+2024-02-20 23:24:20,861 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-20 23:30:01,719 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 23:30:04,732 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 23:30:05,413 :INFO : runScraper :Got all product's URLs
+2024-02-20 23:30:05,413 :INFO : runScraper :16 of baby bed are filtered out
+2024-02-20 23:30:10,681 :INFO : runScraper :All page is loaded
+2024-02-20 23:30:10,683 :INFO : runScraper :ALL page's details are saved on file
+2024-02-20 23:30:10,712 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-20 23:32:17,313 :INFO : runScraper :baby bed is searched on Google
+2024-02-20 23:32:19,691 :INFO : runScraper :Toggled rating 4 and up
+2024-02-20 23:32:20,383 :INFO : runScraper :Got all product's URLs
+2024-02-20 23:32:20,383 :INFO : runScraper :16 of baby bed are filtered out

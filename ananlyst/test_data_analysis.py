@@ -10,14 +10,14 @@ import numpy as np
  
 class DataAnalysis:
     def __init__(self, filePath = str) -> None:
-        self.filePath = "./results/baby_stroller_Raw.csv"
+        self.filePath = "./results/baby_bed_Raw.csv"
         
     
     def preprocessor(self):
         df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['reviews']).reset_index(drop=True)
         # print(df.info())
         # review_df = df[['product','totalRating','total review','seller','price','features','rating','reviews']]
-        df_review = df_raw[['product','totalRating','totalReviews','seller','price','features','rating','reviews']]
+        df_review = df_raw[['product','url','totalRating','totalReviews','seller','price','features','rating','reviews']]
         
         # seller_df = df[['totalRating','title','features','seller', 'price']].dropna(subset=['totalRating']).reset_index(drop=True)
         # seller_df.to_csv('espresso_machines_price.csv')
@@ -182,7 +182,7 @@ class DataAnalysis:
         
     def bestTenProducts(self):
                 # 데이터 파일 경로
-        file_path = './results/baby_stroller_V2.csv'
+        file_path = './results/baby_bed_V2.csv'
 
         # 데이터 불러오기
         data = pd.read_csv(file_path)
@@ -191,7 +191,7 @@ class DataAnalysis:
         data['positive_sentiment'] = data['sentimentAnalysis'].apply(lambda x: 1 if x == 1 else 0)
 
         # 각 제품별로 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 계산
-        product_analysis = data.groupby('product').agg(
+        product_analysis = data.groupby(['product', 'url']).agg(
             average_total_rating=('totalRating', 'mean'),
             average_reviews=('totalReviews', 'mean'),
             average_rating=('rating', 'mean'),
@@ -246,6 +246,6 @@ dataAnalysis = DataAnalysis()
 # dataAnalysis.preprocessor()
 # dataAnalysis.printTest()
 # df = pd.read_csv("./results/baby_stroller_MainFeatures.csv")
-dataAnalysis.wordCloudReviews()
-#dataAnalysis.bestTenProducts()
+# dataAnalysis.wordCloudReviews()
+dataAnalysis.bestTenProducts()
 
