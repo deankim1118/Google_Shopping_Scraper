@@ -76,7 +76,7 @@ class EachMainPage():
         pages_num = 0
         browser = Browser()
         reviewPage = ReviewPage(self.driver, wait)
-        for page in urlDataFrame[:1]:
+        for page in urlDataFrame:
             pages_num += 2
             #Open Browser with get(url)
             browser.openBrowser(page)
@@ -85,6 +85,7 @@ class EachMainPage():
             # DataFrame = [제품이름, 평점, 평점갯수, 특징분석단어, {판매처 Top3, 가격}] 가져오기
             page_detail = pd.DataFrame({
                             "title": self.getPageTitle(),
+                            "url": page,
                             "totalRating": self.getPageRating(),
                             "totalReviews": self.getPageTotalReviews(),
                             "features": self.getPageFeatures(),
