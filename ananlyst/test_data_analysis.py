@@ -183,7 +183,7 @@ class DataAnalysis:
         
     def bestTenProducts(self):
                 # 데이터 파일 경로
-        file_path = './results/baby_bed_V2.csv'
+        file_path = './results/baby_stroller_test.csv'
 
         # 데이터 불러오기
         data = pd.read_csv(file_path)
@@ -192,7 +192,7 @@ class DataAnalysis:
         data['positive_sentiment'] = data['sentimentAnalysis'].apply(lambda x: 1 if x == 1 else 0)
 
         # 각 제품별로 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 계산
-        product_analysis = data.groupby(['product', 'url']).agg(
+        product_analysis = data.groupby(['product']).agg(
             average_total_rating=('totalRating', 'mean'),
             average_reviews=('totalReviews', 'mean'),
             average_rating=('rating', 'mean'),
@@ -224,7 +224,36 @@ class DataAnalysis:
         # top_5_scored_products = product_scores.sort_values(by='score', ascending=False).head(10)
         top_10_products_log.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
     
-    
+    def bestTenFirst(self, df):
+        # PosNegMainFeatures에서 긍정 리뷰의 비율을 숫자로 변환
+        df_score = df.copy()
+        df_score['positive_review_percentage'] = df_score['PosNegMainFeatures'].apply(lambda x: float(x.split('%')[0]) if "positive" in x else None)
+        df_score = df_score.dropna(subset=['positive_review_percentage']).reset_index(drop=True)
+        # data['score'] = data.apply(lambda x: ((x['percentOfMainFeatures'] / 100) * 2.5 + (x['positive_review_percentage'] / 100) * 2.5) if pd.notnull(x['positive_review_percentage']) else 0, axis=1)
+        # 각 제품별로 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 계산
+        product_analysis = df_score.groupby(['title', 'url']).agg(
+            average_total_rating=('totalRating', 'mean'),
+            average_reviews=('totalReviews', 'mean'),
+            average_percentOfMainFeatures=('percentOfMainFeatures', 'mean'),
+            positive_positive_review_percentage=('positive_review_percentage', 'mean')
+        ).reset_index()
+        
+        # 리뷰 수의 로그 변환 적용
+        product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews']) # 총 리뷰수
+        # 로그 변환된 리뷰 수를 정규화할 필요가 없으므로, 직접 종합 점수 계산에 포함
+        product_analysis['final_score'] = (
+            product_analysis['average_total_rating'] / 5 * 1.0 +  # 총 평점! 5점 만점으로 정규화된 점수 
+            product_analysis['average_percentOfMainFeatures'] / product_analysis['average_percentOfMainFeatures'].max() * 1.5 +  # 긍정 키워드 비율 5점 만점으로 정규화된 점수
+            product_analysis['positive_positive_review_percentage'] / 100 * 1.0 +  # 긍정 키워드 감성분석 비율 5점 만점으로 정규화된 점수
+            product_analysis['log_reviews'] / product_analysis['log_reviews'].max() * 1.5  # 최대 로그 리뷰 점수로 정규화
+        ) #* 10 / (2.0 + 3.0 + 2.0 + 3.0)
+
+        # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
+        top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10)
+        ## top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
+        print(type(top_10_products['url']))
+        
+        
     # def wordCloudReviews(self):
     #         data_path = './results/baby_stroller_V2.csv'
     #         stroller_data = pd.read_csv(data_path)
@@ -246,8 +275,8 @@ class DataAnalysis:
 dataAnalysis = DataAnalysis()
 # dataAnalysis.preprocessor()
 # dataAnalysis.printTest()
-df = pd.read_csv("./results/baby_stroller_MainFeatures.csv")
-dataAnalysis.calScore(df)
+df = pd.read_csv("./results/baby_bed_V2.csv")
+dataAnalysis.bestTenFirst(df)
 # dataAnalysis.wordCloudReviews()
 # dataAnalysis.bestTenProducts()
 

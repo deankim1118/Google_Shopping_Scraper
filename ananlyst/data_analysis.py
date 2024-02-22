@@ -19,16 +19,16 @@ class DataAnalysis:
             5. best5의 main_features 점수, Negative Review Percents.
         """
         df_raw = pd.read_csv(self.filePath).drop_duplicates().reset_index(drop=True)
-        # 1. Set Columns that are only used
         # df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
-        # 2. 감성분석
-        #df_sentiment_analysis = self.sentimentAnalysis(df_review)
-        # 3. Split Main Features and Percent of Main Features
+        ### 0. Scrap & Raw 에서 features 전처리.
         df_v2 = self.splitMainFeatures(df_raw)
-        # 4. Save as csv
+        ## Save as csv
         df_v2.to_csv(f'{self.filePath.replace('Raw', 'V2')}', encoding='utf-8-sig')
+        ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+        best_ten_products = self.bestTenFirst(df_v2) 
+        
         # 5. Group by Main Features and save as CSV
-        df_mainFeatures = self.groupMainFeatures(df_v2)
+        # df_mainFeatures = self.groupMainFeatures(df_v2)
         # 6. Pick Best 10 Products
         #self.bestTenProducts(df_v2)
         # 7. Caculate scores by Main Features
@@ -77,33 +77,62 @@ class DataAnalysis:
         group_mainFeatures = df.groupby(['main_features','title','PosNegMainFeatures','totalRating','totalReviews','numOfMainFeatures'])['percentOfMainFeatures'].mean()
         group_mainFeatures.to_csv(f'{self.filePath.replace('Raw', 'MainFeatures')}', encoding='utf-8-sig')
         return group_mainFeatures
-        
-    def bestTenProducts(self, df):
-        # 'positive_sentiment' 컬럼 추가: 1은 긍정, -1은 부정
-        df['positive_sentiment'] = df['sentimentAnalysis'].apply(lambda x: 1 if x == 1 else 0)
-
+    
+    def bestTenFirst(self, df):
+        # PosNegMainFeatures에서 긍정 리뷰의 비율을 숫자로 변환
+        df_score = df.copy()
+        df_score['positive_review_percentage'] = df_score['PosNegMainFeatures'].apply(lambda x: float(x.split('%')[0]) if "positive" in x else None)
+        df_score = df_score.dropna(subset=['positive_review_percentage']).reset_index(drop=True)
+        # data['score'] = data.apply(lambda x: ((x['percentOfMainFeatures'] / 100) * 2.5 + (x['positive_review_percentage'] / 100) * 2.5) if pd.notnull(x['positive_review_percentage']) else 0, axis=1)
         # 각 제품별로 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 계산
-        product_analysis = df.groupby(['product','url']).agg(
+        product_analysis = df_score.groupby(['title', 'url']).agg(
             average_total_rating=('totalRating', 'mean'),
             average_reviews=('totalReviews', 'mean'),
-            average_rating=('rating', 'mean'),
-            positive_sentiment_rate=('positive_sentiment', 'mean')
+            average_percentOfMainFeatures=('percentOfMainFeatures', 'mean'),
+            positive_positive_review_percentage=('positive_review_percentage', 'mean')
         ).reset_index()
         
         # 리뷰 수의 로그 변환 적용
-        product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews'])
+        product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews']) # 총 리뷰수
         # 로그 변환된 리뷰 수를 정규화할 필요가 없으므로, 직접 종합 점수 계산에 포함
-        product_analysis['normalized_sentiment'] = product_analysis['positive_sentiment_rate'] * 5
         product_analysis['final_score'] = (
-            product_analysis['average_total_rating'] / 5 * 2.0 +  # 5점 만점으로 정규화된 점수
-            product_analysis['average_rating'] / 5 * 2.0 +  # 5점 만점으로 정규화된 점수
-            product_analysis['normalized_sentiment'] / 5 * 3.0 +  # 5점 만점으로 정규화된 점수
-            product_analysis['log_reviews'] / product_analysis['log_reviews'].max() * 3.0  # 최대 로그 리뷰 점수로 정규화
-        ) * 10 / (2.0 + 2.0 + 3.0 + 3.0) 
-        # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 10개 제품 선정
-        top_10_products_log = product_analysis.sort_values(by='final_score', ascending=False).head(10)
-        # Save to file
-        top_10_products_log.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
+            product_analysis['average_total_rating'] / 5 * 1.0 +  # 총 평점! 5점 만점으로 정규화된 점수 
+            product_analysis['average_percentOfMainFeatures'] / product_analysis['average_percentOfMainFeatures'].max() * 1.5 +  # 긍정 키워드 비율 5점 만점으로 정규화된 점수
+            product_analysis['positive_positive_review_percentage'] / 100 * 1.0 +  # 긍정 키워드 감성분석 비율 5점 만점으로 정규화된 점수
+            product_analysis['log_reviews'] / product_analysis['log_reviews'].max() * 1.5  # 최대 로그 리뷰 점수로 정규화
+        ) #* 10 / (2.0 + 3.0 + 2.0 + 3.0)
+
+        # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
+        top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10)
+        top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
+        return top_10_products
+        
+    # def bestTenProducts(self, df):
+    #     # 'positive_sentiment' 컬럼 추가: 1은 긍정, -1은 부정
+    #     df['positive_sentiment'] = df['sentimentAnalysis'].apply(lambda x: 1 if x == 1 else 0)
+
+    #     # 각 제품별로 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 계산
+    #     product_analysis = df.groupby(['product','url']).agg(
+    #         average_total_rating=('totalRating', 'mean'),
+    #         average_reviews=('totalReviews', 'mean'),
+    #         average_rating=('rating', 'mean'),
+    #         positive_sentiment_rate=('positive_sentiment', 'mean')
+    #     ).reset_index()
+        
+    #     # 리뷰 수의 로그 변환 적용
+    #     product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews'])
+    #     # 로그 변환된 리뷰 수를 정규화할 필요가 없으므로, 직접 종합 점수 계산에 포함
+    #     product_analysis['normalized_sentiment'] = product_analysis['positive_sentiment_rate'] * 5
+    #     product_analysis['final_score'] = (
+    #         product_analysis['average_total_rating'] / 5 * 2.0 +  # 5점 만점으로 정규화된 점수
+    #         product_analysis['average_rating'] / 5 * 2.0 +  # 5점 만점으로 정규화된 점수
+    #         product_analysis['normalized_sentiment'] / 5 * 3.0 +  # 5점 만점으로 정규화된 점수
+    #         product_analysis['log_reviews'] / product_analysis['log_reviews'].max() * 3.0  # 최대 로그 리뷰 점수로 정규화
+    #     ) * 10 / (2.0 + 2.0 + 3.0 + 3.0) 
+    #     # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 10개 제품 선정
+    #     top_10_products_log = product_analysis.sort_values(by='final_score', ascending=False).head(10)
+    #     # Save to file
+    #     top_10_products_log.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
         
     # "PosNegMainFeatures" 컬럼에서 긍정,부정 비율 추출 함수
     def extract_percentage(self, column, patternString):
