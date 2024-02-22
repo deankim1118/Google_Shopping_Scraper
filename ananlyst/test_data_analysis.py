@@ -136,7 +136,7 @@ class DataAnalysis:
                         positive_score = None
                     
                     if not pd.isnull(negative_percentage_avg):
-                        negative_score = (negative_percentage_avg / 100) * 5
+                        negative_score = 5 - (negative_percentage_avg / 100) * 5
                     else:
                         negative_score = None
                     
@@ -153,9 +153,9 @@ class DataAnalysis:
                     product_feature_scores[product][feature] = {
                         'PositiveScore': positive_score,
                         'NegativeScore': negative_score,
-                        'FinalScore': round(final_score, 2)
+                        'FinalScore': round(final_score, 2),
+                        'PosNegPercentage' : feature_df['percentOfMainFeatures'].mean(),
                     }
-                
         # DataFrame으로 변환
         results = []
         for product, features in product_feature_scores.items():
@@ -165,13 +165,14 @@ class DataAnalysis:
                     'Feature': feature,
                     'PositiveScore': scores['PositiveScore'],
                     'NegativeScore': scores['NegativeScore'],
-                    'FinalScore': scores['FinalScore']
+                    'FinalScore': scores['FinalScore'],
+                    'PosNegPercentage' : scores['PosNegPercentage'],
                 })
         df_score = pd.DataFrame(results)
         # Add the "Easy to use score" to the DataFrame
-        df_score.to_csv(f'{self.filePath.replace('Raw', 'Score2')}', encoding='utf-8-sig')
+        df_score.to_csv(f'{self.filePath.replace('Raw', 'Score_test')}', encoding='utf-8-sig')
                     
-        print(df_score.info())
+        print(df_score.head())
 
         # # 결과 출력 (모든 제품에 대한 출력은 과도할 수 있으므로 첫 2개 제품의 결과만 예시로 보여줍니다)
         # for product, features_scores in list(product_feature_scores.items())[:2]:
@@ -245,7 +246,8 @@ class DataAnalysis:
 dataAnalysis = DataAnalysis()
 # dataAnalysis.preprocessor()
 # dataAnalysis.printTest()
-# df = pd.read_csv("./results/baby_stroller_MainFeatures.csv")
+df = pd.read_csv("./results/baby_stroller_MainFeatures.csv")
+dataAnalysis.calScore(df)
 # dataAnalysis.wordCloudReviews()
-dataAnalysis.bestTenProducts()
+# dataAnalysis.bestTenProducts()
 

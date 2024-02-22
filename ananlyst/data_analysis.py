@@ -11,6 +11,12 @@ class DataAnalysis:
         
     
     def preprocessor(self):      
+        """ 1. Review 제외하고 main_features.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+            2. Scraping Best10 Reviews & ratings
+            3. Best10 Sentiment Analysis
+            4. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기
+            5. best5의 main_features 점수, Negative Review Percents.
+        """
         df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['reviews']).reset_index(drop=True)
         # 1. Set Columns that are only used
         df_review = df_raw[['product','url','totalRating','totalReviews','seller','price','features','rating','reviews']]
@@ -155,7 +161,8 @@ class DataAnalysis:
                     product_feature_scores[product][feature] = {
                         'PositiveScore': positive_score,
                         'NegativeScore': negative_score,
-                        'FinalScore': round(final_score, 2)
+                        'FinalScore': round(final_score, 2),
+                        'PosNegPercentage' : feature_df['percentOfMainFeatures'].mean(),
                     }
                     
         # DataFrame으로 변환
@@ -167,7 +174,8 @@ class DataAnalysis:
                     'Feature': feature,
                     'PositiveScore': scores['PositiveScore'],
                     'NegativeScore': scores['NegativeScore'],
-                    'FinalScore': scores['FinalScore']
+                    'FinalScore': scores['FinalScore'],
+                    'PosNegPercentage' : scores['PosNegPercentage'],
                 })
         df_score = pd.DataFrame(results)
         # Add the "Easy to use score" to the DataFrame
@@ -181,6 +189,8 @@ class DataAnalysis:
         #     for feature, score in features_scores.items():
         #         print(f"  - {feature}: {score:.2f}점")
         #     print("\n")
+        
+        """필요시 moveToEachPage()로 Best5 URL and average_review 이용해서 모든 review 가져와서 분석하는 함수 만들기!"""
         
 # dataAnalysis = DataAnalysis()
 # dataAnalysis.preprocessor()
