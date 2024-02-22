@@ -19,7 +19,7 @@ class DataAnalysis:
         """
         df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['reviews']).reset_index(drop=True)
         # 1. Set Columns that are only used
-        df_review = df_raw[['product','seller','price','url','totalRating','totalReviews','features']]
+        df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
         # 2. 감성분석
         df_sentiment_analysis = self.sentimentAnalysis(df_review)
         # 3. Split Main Features and Percent of Main Features
