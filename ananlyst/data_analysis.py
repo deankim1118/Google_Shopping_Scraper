@@ -19,7 +19,7 @@ class DataAnalysis:
         """
         df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['reviews']).reset_index(drop=True)
         # 1. Set Columns that are only used
-        df_review = df_raw[['product','url','totalRating','totalReviews','seller','price','features','rating','reviews']]
+        df_review = df_raw[['product','seller','price','url','totalRating','totalReviews','features']]
         # 2. 감성분석
         df_sentiment_analysis = self.sentimentAnalysis(df_review)
         # 3. Split Main Features and Percent of Main Features
@@ -131,7 +131,7 @@ class DataAnalysis:
             # print(easy_to_use_count)
             for feature in features:
                 feature_df = product_df[product_df['main_features'] == feature]
-                if not feature_df.empty and (feature_df['percentOfMainFeatures'].item() >= 5 or (feature_df['percentOfMainFeatures'].item() >= 3.5 and feature_df['numOfMainFeatures'].item() >= 30) or (feature_df['percentOfMainFeatures'].item() >= 2.5 and not pd.isnull(feature_df['NegativePercentage'].item()) and feature_df['numOfMainFeatures'].item() >= 10)):
+                if not feature_df.empty and (feature_df['percentOfMainFeatures'].item() >= 5 or (feature_df['percentOfMainFeatures'].item() >= 3.5 and feature_df['numOfMainFeatures'].item() >= 30) or (feature_df['percentOfMainFeatures'].item() >= 2.5 and not pd.isnull(feature_df['NegativePercentage'].item()) and feature_df['percentOfMainFeatures'].item() >= 5)):
                     # 평균 긍정 및 부정 비율 계산
                     positive_percentage_avg = feature_df['PositivePercentage'].mean()
                     negative_percentage_avg = feature_df['NegativePercentage'].mean()

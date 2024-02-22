@@ -34,7 +34,7 @@ def getPageRating():
 def getPageTotalReviews():
     return driver.find_element(*pageTotalReviews).text.split(" ")[0]
 def getPageFeatures():
-    return [f.text.strip() for f in driver.find_elements(*pageFeatures)[:5]]
+    return [f.text.strip() for f in driver.find_elements(*pageFeatures)]
 def getPageSellers(iterateCount = 3):
     allSellerAndPrice = []
     iterateCount = iterateCount
@@ -70,9 +70,9 @@ def getPageFooter():
 # DataFrame = [제품이름, 평점, 평점갯수, 특징분석단어, {판매처 Top3, 가격}] 가져오기
 
 
-def test():
+def test_moveToEachPage():
     df_page_details = []
-    df_page_reviews = []
+    # df_page_reviews = []
     wait = WebDriverWait(driver, 5)
     reviewPage = ReviewPage(driver, wait)
     pages_num = 0
@@ -91,17 +91,17 @@ def test():
         page_sellers = pd.DataFrame(getPageSellers())
                                      
         ## Wait until All Reviews Button is clickable and Click
-        all_reviews_button = wait.until(EC.element_to_be_clickable(getPageAllReviews()))
-        all_reviews_button.click()
+        # all_reviews_button = wait.until(EC.element_to_be_clickable(getPageAllReviews()))
+        # all_reviews_button.click()
     
         ### Wait until More Reviews Button is clickable and Click
-        df_page_reviews = reviewPage.getReviewContents()
-        df_page_concat = pd.concat([page_detail,page_sellers,df_page_reviews], axis=1)
+        # df_page_reviews = reviewPage.getReviewContents()
+        # df_page_concat = pd.concat([page_detail,page_sellers,df_page_reviews], axis=1)
+        df_page_concat = pd.concat([page_detail,page_sellers], axis=1)
         df_page_details.append(df_page_concat)
-    print(f"Total reveiws are {len(df_page_reviews)}")
-        ### Get All the reviews
-        #wait.until(EC.url_changes(page[pages_num]))
+
     df_page_details = pd.concat(df_page_details)
+    print(df_page_details.head(), df_page_details.info())
     return df_page_details
     
 
@@ -122,4 +122,4 @@ def test():
 #         print("Can't fin id='full'")
 #         pass
     
-print(test())
+print(test_moveToEachPage())

@@ -43,7 +43,7 @@ class GooggleScraper(Browser):
         
         # Move to each Page
         print("Please wait! I'm scraping all products...")
-        df_all_page_details = eachMainPage.moveToEachPage(urlDataFrame=df_all_product_urls, moreBtnClickCount=1)
+        df_all_page_details = eachMainPage.moveToEachPage(urlDataFrame=df_all_product_urls)
         log.info("All page is loaded")
         print(f"Congrates! All {self.productName}'s scraping is done!!!")
         

@@ -1,0 +1,1 @@
+'PosNegPercentage' : feature_df['percentOfMainFeatures'].mean(),
