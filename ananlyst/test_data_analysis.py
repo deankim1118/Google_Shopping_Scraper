@@ -92,7 +92,7 @@ class DataAnalysis:
         return df
         
     def groupMainFeatures(self, df):
-        group_mainFeatures = df.groupby(['main_features','product','PosNegMainFeatures'])['percentOfMainFeatures'].mean()
+        group_mainFeatures = df.groupby(['main_features','title','PosNegMainFeatures'])['percentOfMainFeatures'].mean()
         group_mainFeatures.to_csv(f'{self.filePath.replace('Raw', 'MainFeatures')}', encoding='utf-8-sig')
      
      # "PosNegMainFeatures" 컬럼에서 긍정 비율 추출 함수

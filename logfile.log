@@ -60,3 +60,10 @@
 2024-02-20 23:32:19,691 :INFO : runScraper :Toggled rating 4 and up
 2024-02-20 23:32:20,383 :INFO : runScraper :Got all product's URLs
 2024-02-20 23:32:20,383 :INFO : runScraper :16 of baby bed are filtered out
+2024-02-21 22:06:12,660 :INFO : runScraper :baby bed is searched on Google
+2024-02-21 22:06:15,299 :INFO : runScraper :Toggled rating 4 and up
+2024-02-21 22:06:16,055 :INFO : runScraper :Got all product's URLs
+2024-02-21 22:06:16,058 :INFO : runScraper :13 of baby bed are filtered out
+2024-02-21 22:06:39,972 :INFO : runScraper :All page is loaded
+2024-02-21 22:06:39,973 :INFO : runScraper :ALL page's details are saved on file
+2024-02-21 22:06:39,985 :INFO : runScraper :ALL Data Preprocessing is done

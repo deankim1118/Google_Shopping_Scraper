@@ -6,33 +6,33 @@ from textblob import TextBlob
  
 class DataAnalysis:
     def __init__(self, filePath = str) -> None:
-        self.filePath = filePath
-        # self.filePath = "./results/baby_stroller_Raw.csv"
+        # self.filePath = filePath
+        self.filePath = "./results/baby_bed_Raw.csv"
         
     
     def preprocessor(self):      
-        """ 0. Raw 에서 features 전처리
-            1. Review 제외하고 v2.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+        """ 0. Review 제외하고 Scrap & Raw 에서 features 전처리.
+            1. v2.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
             2. Scraping Best10 Reviews & ratings
             3. Best10 Sentiment Analysis
             4. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기
             5. best5의 main_features 점수, Negative Review Percents.
         """
-        df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['reviews']).reset_index(drop=True)
+        df_raw = pd.read_csv(self.filePath).drop_duplicates().reset_index(drop=True)
         # 1. Set Columns that are only used
-        df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
+        # df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
         # 2. 감성분석
-        df_sentiment_analysis = self.sentimentAnalysis(df_review)
+        #df_sentiment_analysis = self.sentimentAnalysis(df_review)
         # 3. Split Main Features and Percent of Main Features
-        df_v2 = self.splitMainFeatures(df_sentiment_analysis)
+        df_v2 = self.splitMainFeatures(df_raw)
         # 4. Save as csv
         df_v2.to_csv(f'{self.filePath.replace('Raw', 'V2')}', encoding='utf-8-sig')
         # 5. Group by Main Features and save as CSV
         df_mainFeatures = self.groupMainFeatures(df_v2)
         # 6. Pick Best 10 Products
-        self.bestTenProducts(df_v2)
+        #self.bestTenProducts(df_v2)
         # 7. Caculate scores by Main Features
-        self.calScore(df_v2)
+        #self.calScore(df_v2)
         
      ### Sentiment Analysis
     def sentimentAnalysis(self, df):
@@ -74,7 +74,7 @@ class DataAnalysis:
     def groupMainFeatures(self, df):
         # group_mainFeatures = df.groupby(['main_features','product','PosNegMainFeatures'])['percentOfMainFeatures'].mean()
         # group_mainFeatures.to_csv(f'{self.filePath.replace('Raw', 'MainFeatures')}', encoding='utf-8-sig')
-        group_mainFeatures = df.groupby(['main_features','product','PosNegMainFeatures','totalRating','totalReviews','numOfMainFeatures'])['percentOfMainFeatures'].mean()
+        group_mainFeatures = df.groupby(['main_features','title','PosNegMainFeatures','totalRating','totalReviews','numOfMainFeatures'])['percentOfMainFeatures'].mean()
         group_mainFeatures.to_csv(f'{self.filePath.replace('Raw', 'MainFeatures')}', encoding='utf-8-sig')
         return group_mainFeatures
         
@@ -132,7 +132,7 @@ class DataAnalysis:
             # print(easy_to_use_count)
             for feature in features:
                 feature_df = product_df[product_df['main_features'] == feature]
-                if not feature_df.empty and (feature_df['percentOfMainFeatures'].item() >= 5 or (feature_df['percentOfMainFeatures'].item() >= 3.5 and feature_df['numOfMainFeatures'].item() >= 30) or (feature_df['percentOfMainFeatures'].item() >= 2.5 and not pd.isnull(feature_df['NegativePercentage'].item()) and feature_df['percentOfMainFeatures'].item() >= 5)):
+                if not feature_df.empty and (feature_df['percentOfMainFeatures'].item() >= 5 or feature_df['numOfMainFeatures'].item() >= 50 or (feature_df['percentOfMainFeatures'].item() >= 2.5 and not pd.isnull(feature_df['NegativePercentage'].item()) and feature_df['percentOfMainFeatures'].item() >= 4)):
                     # 평균 긍정 및 부정 비율 계산
                     positive_percentage_avg = feature_df['PositivePercentage'].mean()
                     negative_percentage_avg = feature_df['NegativePercentage'].mean()
@@ -193,5 +193,5 @@ class DataAnalysis:
         
         """필요시 moveToEachPage()로 Best5 URL and average_review 이용해서 모든 review 가져와서 분석하는 함수 만들기!"""
         
-# dataAnalysis = DataAnalysis()
-# dataAnalysis.preprocessor()
+dataAnalysis = DataAnalysis()
+dataAnalysis.preprocessor()
