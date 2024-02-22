@@ -11,7 +11,8 @@ class DataAnalysis:
         
     
     def preprocessor(self):      
-        """ 1. Review 제외하고 main_features.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+        """ 0. Raw 에서 features 전처리
+            1. Review 제외하고 v2.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
             2. Scraping Best10 Reviews & ratings
             3. Best10 Sentiment Analysis
             4. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기
