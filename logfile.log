@@ -147,3 +147,8 @@
 2024-02-23 13:53:35,729 :INFO : runScraper :Pick Best 10 Products in First Stage...
 2024-02-23 13:53:35,748 :INFO : runScraper :We Pick All Best 10 Products!
 2024-02-23 13:53:35,749 :INFO : runScraper :Please wait! I'm scraping Best 10 all Reviews...
+2024-02-23 13:55:36,932 :INFO : runScraper :double strollers is searched on Google
+2024-02-23 13:55:40,876 :INFO : runScraper :Toggled rating 4 and up
+2024-02-23 13:55:41,609 :INFO : runScraper :Got all product's URLs
+2024-02-23 13:55:41,609 :INFO : runScraper :26 of double strollers are filtered out
+2024-02-23 14:00:42,567 :INFO : runScraper :double strollers is searched on Google

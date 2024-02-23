@@ -44,9 +44,10 @@ class GooggleScraper(Browser):
         print(f"{len(df_all_product_urls)} of {self.productName} are filtered out")
         
         # Move to each Page
+        log.info("Please wait! I'm scraping all products...")
         print("Please wait! I'm scraping all products...")
         df_all_page_details = eachMainPage.moveToEachPage(urlDataFrame=df_all_product_urls)
-        log.info("All page is loaded")
+        log.info(f"Congrates! All {self.productName}'s scraping is done!!!")
         print(f"Congrates! All {self.productName}'s scraping is done!!!")
         
         # Save to Excel file
