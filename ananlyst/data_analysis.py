@@ -5,9 +5,9 @@ import pandas as pd
 from textblob import TextBlob
 
 class DataAnalysis:
-    def __init__(self, filePath = str) -> None:
-        # self.filePath = filePath
-        self.filePath = "./results/baby_bed_Raw.csv"
+    def __init__(self, filePath) -> None:
+        self.filePath = filePath
+        # self.filePath = "./results/baby_bed_Raw.csv"
     
     def preprocessor(self):      
         """ 0. Review 제외하고 Scrap & Raw 에서 features 전처리. 
@@ -241,8 +241,8 @@ class DataAnalysis:
         
         """필요시 moveToEachPage()로 Best5 URL and average_review 이용해서 모든 review 가져와서 분석하는 함수 만들기!"""
         
-dataAnalysis = DataAnalysis()
-df_v2 = dataAnalysis.preprocessor()
-best_ten_products = dataAnalysis.bestTenFirst(df_v2)
-urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
-print(print(f'{urls_best_ten} : {average_reviews}'))
+# dataAnalysis = DataAnalysis()
+# df_v2 = dataAnalysis.preprocessor()
+# best_ten_products = dataAnalysis.bestTenFirst(df_v2)
+# urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
+# print(print(f'{urls_best_ten} : {average_reviews}'))

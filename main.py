@@ -67,9 +67,10 @@ class GooggleScraper(Browser):
         ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
         log.info("Pick Best 10 Products in First Stage...")
         print("Pick Best 10 Products in First Stage...")
-        best_ten_products = dataAnalysis.bestTenFirst(self.df_v2)
+        best_ten_products = dataAnalysis.bestTenFirst(df_V2)
         log.info("We Pick All Best 10 Products!")
         print("We Pick All Best 10 Products!")
+        
         ### 2. Get Url + moveToEachReviewPage 
         ### 2. Scraping Best10 Reviews & ratings, moreBtnClickCount =  average_reviews / 10, maximum 350 리뷰 이하로 Scrap
         ## 2-1. Get Best 10 url and average reviews
@@ -77,9 +78,12 @@ class GooggleScraper(Browser):
         ## 2-2. Scrap Best10 and moreBtnClickCount = Review 합계에 따라서 다르게 하기! Max 29! Total Reviews / 10 - 2
         log.info("Please wait! I'm scraping Best 10 all Reviews...")
         print("Please wait! I'm scraping Best 10 all Reviews...")
-        eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = utility.getMoreBtnNumber(df=best_ten_products, urls_best_ten=urls_best_ten))
+        df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = utility.getMoreBtnNumber(df=best_ten_products, urls_best_ten=urls_best_ten))
         log.info(f"Congrates! All {self.productName}'s Best 10's scraping is done!!!")
         print(f"Congrates! All {self.productName}'s Best 10's scraping is done!!!")
+        ## 2-3 Save as new sheets into df_Raw file.
+        dataAnalysis.addToExcelSheet(df_best_ten_reviews, 'reviews')
+        print(f"Congrates! Save All {self.productName}'s Best 10 reviews are saved into NEW SHEET!!!")
         #self.driver.quit()
         
 googgleScraper = GooggleScraper("baby bed")

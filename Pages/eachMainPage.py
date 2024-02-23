@@ -33,7 +33,7 @@ class EachMainPage():
     def getPageRating(self):
         page_Rating = self.driver.find_element(*EachMainPage.pageRating).text
         assert page_Rating is not None, "Can't get pageRating Locator"
-        return page_Rating
+        return float(page_Rating)
     def getPageTotalReviews(self):
         page_total_reviews = self.driver.find_element(*EachMainPage.pageTotalReviews).text.split(" ")[0]
         return page_total_reviews

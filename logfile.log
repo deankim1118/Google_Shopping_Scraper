@@ -67,3 +67,32 @@
 2024-02-21 22:06:39,972 :INFO : runScraper :All page is loaded
 2024-02-21 22:06:39,973 :INFO : runScraper :ALL page's details are saved on file
 2024-02-21 22:06:39,985 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-23 12:57:57,911 :INFO : runScraper :baby bed is searched on Google
+2024-02-23 12:58:01,666 :INFO : runScraper :Toggled rating 4 and up
+2024-02-23 12:58:02,418 :INFO : runScraper :Got all product's URLs
+2024-02-23 12:58:02,418 :INFO : runScraper :13 of baby bed are filtered out
+2024-02-23 12:58:24,143 :INFO : runScraper :All page is loaded
+2024-02-23 12:58:24,143 :INFO : runScraper :ALL page's details are saved on file
+2024-02-23 12:58:24,357 :INFO : runScraper :Split Features Column to new columns and save as df_V2.CSV!
+2024-02-23 12:58:24,357 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-23 12:58:24,357 :INFO : runScraper :Pick Best 10 Products in First Stage...
+2024-02-23 13:01:41,684 :INFO : runScraper :baby bed is searched on Google
+2024-02-23 13:01:44,822 :INFO : runScraper :Toggled rating 4 and up
+2024-02-23 13:01:45,556 :INFO : runScraper :Got all product's URLs
+2024-02-23 13:01:45,556 :INFO : runScraper :13 of baby bed are filtered out
+2024-02-23 13:02:06,366 :INFO : runScraper :All page is loaded
+2024-02-23 13:02:06,366 :INFO : runScraper :ALL page's details are saved on file
+2024-02-23 13:02:06,515 :INFO : runScraper :Split Features Column to new columns and save as df_V2.CSV!
+2024-02-23 13:02:06,515 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-23 13:02:06,516 :INFO : runScraper :Pick Best 10 Products in First Stage...
+2024-02-23 13:02:06,572 :INFO : runScraper :We Pick All Best 10 Products!
+2024-02-23 13:02:06,572 :INFO : runScraper :Please wait! I'm scraping Best 10 all Reviews...
+2024-02-23 13:02:32,162 :INFO : runScraper :Congrates! All baby bed's Best 10's scraping is done!!!
+2024-02-23 13:08:19,685 :INFO : runScraper :baby bed is searched on Google
+2024-02-23 13:08:22,771 :INFO : runScraper :Toggled rating 4 and up
+2024-02-23 13:08:23,507 :INFO : runScraper :Got all product's URLs
+2024-02-23 13:08:23,507 :INFO : runScraper :2 of baby bed are filtered out
+2024-02-23 13:11:21,016 :INFO : runScraper :baby bed is searched on Google
+2024-02-23 13:11:24,357 :INFO : runScraper :Toggled rating 4 and up
+2024-02-23 13:11:25,072 :INFO : runScraper :Got all product's URLs
+2024-02-23 13:11:25,072 :INFO : runScraper :2 of baby bed are filtered out
