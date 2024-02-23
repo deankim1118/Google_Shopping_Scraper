@@ -39,7 +39,7 @@ class GooggleScraper(Browser):
         
         # get URL List in Pandas DataFrame 평점갯수 > 200 필터링
         print(f"Please Wait! {self.productName} are filtering")
-        df_all_product_urls = homePage.intoDataFrame(allProducts=list_all_products, ratingFilterNum=290)
+        df_all_product_urls = homePage.intoDataFrame(allProducts=list_all_products, ratingFilterNum=250)
         log.info(f"{len(df_all_product_urls)} of {self.productName} are filtered out")
         print(f"{len(df_all_product_urls)} of {self.productName} are filtered out")
         
@@ -67,7 +67,7 @@ class GooggleScraper(Browser):
         ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
         log.info("Pick Best 10 Products in First Stage...")
         print("Pick Best 10 Products in First Stage...")
-        best_ten_products = dataAnalysis.bestTenFirst(df_V2)
+        best_ten_products = dataAnalysis.bestTenFirst(df_V2).dropna(subset='title')
         log.info("We Pick All Best 10 Products!")
         print("We Pick All Best 10 Products!")
         
@@ -86,5 +86,5 @@ class GooggleScraper(Browser):
         print(f"Congrates! Save All {self.productName}'s Best 10 reviews are saved into NEW SHEET!!!")
         #self.driver.quit()
         
-googgleScraper = GooggleScraper("baby bed")
+googgleScraper = GooggleScraper("double strollers")
 googgleScraper.runScraper()

@@ -21,7 +21,7 @@ class DataAnalysis:
             5. best5의 main_features 점수, Negative Review Percents.
         """
 
-        df_raw = pd.read_csv(self.filePath).drop_duplicates().reset_index(drop=True)
+        df_raw = pd.read_csv(self.filePath).drop_duplicates(subset='title').reset_index(drop=True)
         # df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
         ### Save as xlsx Excel file
         df_raw_xlsx = self.replaceCsvToXlsx()
