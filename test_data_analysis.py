@@ -114,8 +114,8 @@ class DataAnalysis:
          # data['score'] = data.apply(lambda x: ((x['percentOfMainFeatures'] / 100) * 2.5 + (x['positive_review_percentage'] / 100) * 2.5) if pd.notnull(x['positive_review_percentage']) else 0, axis=1)
 
         # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
-        top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10)
-        top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
+        top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10).reset_index(drop=True)
+        top_10_products.to_csv(f'{self.filePath.replace('Raw', 'BestTen')}', encoding='utf-8-sig')
         return top_10_products
         
     # def bestTenProducts(self, df):
@@ -239,12 +239,38 @@ df_v2 = dataAnalysis.preprocessor()
 browser = Browser()
 driver = browser.driver
 best_ten_products = dataAnalysis.bestTenFirst(df_v2)
-
 urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
-print(print(f'{urls_best_ten} : {average_reviews}'))
+
+def getMoreBtnNumber(df, urls_best_ten):
+    # baby_bed_bestTen DataFrame에서 해당 URL이 있는 행 찾기
+    matching_row = df[df['url'] == urls_best_ten]
+
+    # 해당 행이 존재하면 average_reviews 값 추출 및 함수 호출
+    if not matching_row.empty:
+        average_reviews = matching_row.iloc[0]['average_reviews']
+        if average_reviews >= 330:
+            moreBtnClickCount = 29
+        else:
+            moreBtnClickCount = int(average_reviews / 10 - 3)
+    return moreBtnClickCount
+
 
 pages = EachMainPage(driver)
-pages.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = 1)
+pages.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = getMoreBtnNumber(best_ten_products, urls_best_ten))
 
-for product in best_ten_products:
-    pass
+# def test2(urls_best_ten):
+#     for url in urls_best_ten:
+#         # baby_bed_bestTen DataFrame에서 해당 URL이 있는 행 찾기
+#         matching_row = best_ten_products[best_ten_products['url'] == url]
+
+#         # 해당 행이 존재하면 average_reviews 값 추출 및 함수 호출
+#         if not matching_row.empty:
+#             average_reviews = matching_row.iloc[0]['average_reviews']
+#             if average_reviews >= 330:
+#                 moreBtnClickCount = 29
+#             else:
+#                 moreBtnClickCount = int(average_reviews / 10 - 3)
+                
+#         print(f'{average_reviews} : {moreBtnClickCount}')
+        
+# test2(best_ten_products['url'])

@@ -73,6 +73,7 @@ class ReviewPage:
     ######## Get Reviews and Ratings ########
     # More_BTN_Click_Count = 23
     def getReviewContents(self, More_BTN_Click_Count):
+        print(More_BTN_Click_Count)
         df_page_reviews = []
         product = self.getProductName()
         # Scroll and Click More Button
@@ -92,6 +93,7 @@ class ReviewPage:
         df_page_reviews = pd.DataFrame(df_page_reviews) 
         
         return df_page_reviews
+    
     
 ### 감성분석 TEST
 # all_review_data = test()

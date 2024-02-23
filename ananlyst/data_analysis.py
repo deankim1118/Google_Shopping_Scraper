@@ -120,7 +120,7 @@ class DataAnalysis:
          # data['score'] = data.apply(lambda x: ((x['percentOfMainFeatures'] / 100) * 2.5 + (x['positive_review_percentage'] / 100) * 2.5) if pd.notnull(x['positive_review_percentage']) else 0, axis=1)
 
         # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
-        top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10)
+        top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10).reset_index(drop=True)
         # top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
         self.addToExcelSheet(dataFrame=top_10_products, sheetName='best10')
   
