@@ -4,8 +4,6 @@ import numpy as np
 import pandas as pd
 from textblob import TextBlob
 
-from utilites.utility import Utility
- 
 class DataAnalysis:
     def __init__(self, filePath = str) -> None:
         # self.filePath = filePath
@@ -14,37 +12,34 @@ class DataAnalysis:
     
     def preprocessor(self):      
         """ 0. Review 제외하고 Scrap & Raw 에서 features 전처리. 
-                eachMainPage.moveToEachPage(df)
+                EachMainPage.moveToEachPage(df)
                 DataAnalysis.splitMainFeatures(df_raw)
             1. v2.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+                DataAnalysis.bestTenFirst(df_v2)
             2. Scraping Best10 Reviews & ratings
             3. Best10 Sentiment Analysis
-            4. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기
+            4. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기 
             5. best5의 main_features 점수, Negative Review Percents.
         """
-        log = Utility.getLogger(self)
+
         df_raw = pd.read_csv(self.filePath).drop_duplicates().reset_index(drop=True)
-        log.info("Raw data is saved as CSV!")
-        print("Raw data is saved as CSV!")
         # df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
+        ### Save as xlsx Excel file
+        df_raw_xlsx = self.filePath.replace('Raw.csv', 'All.xlsx')
+        df_raw.to_excel(df_raw_xlsx ,sheet_name='Raw', index=False, engine='openpyxl')
+          
         ### 0. Scrap & Raw 에서 features 전처리.
         df_v2 = self.splitMainFeatures(df_raw)
-        ## Save as csv
-        df_v2.to_csv(f'{self.filePath.replace('Raw', 'V2')}', encoding='utf-8-sig')
-        log.info("Split Features Column to new columns and save as df_V2.CSV!")
-        print("Split Features Column to new columns and save as df_V2.CSV!")
-        ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
-        best_ten_products = self.bestTenFirst(df_v2)
-        log.info("Pick Best 10 Products in First Stage!")
-        print("Pick Best 10 Products in First Stage")
+        ## 0-1.Save as csv
+        # df_v2.to_csv(f'{self.filePath.replace('Raw', 'V2')}', encoding='utf-8-sig')
+        ## V2데이터를 전처리 후에 Product_All.xlsc 의 새로운 Sheet에 저장.
+        # Excel writer를 사용하여 Excel 파일로 저장합니다.
+        with pd.ExcelWriter(df_raw_xlsx, engine='openpyxl', mode='a') as writer:
+            # 전처리된 데이터를 'V2' 시트에 저장합니다.
+            df_v2.to_excel(writer, sheet_name='V2', index=False)
         
-        # 5. Group by Main Features and save as CSV
-        # df_mainFeatures = self.groupMainFeatures(df_v2)
-        # 6. Pick Best 10 Products
-        #self.bestTenProducts(df_v2)
-        # 7. Caculate scores by Main Features
-        #self.calScore(df_v2)
-        print(best_ten_products.head())
+        return df_v2
+        
      ### Sentiment Analysis
     def sentimentAnalysis(self, df):
         sentimentAnalysis = []
@@ -168,13 +163,13 @@ class DataAnalysis:
         product_feature_scores = defaultdict(dict)
 
         # 각 제품 및 주요 기능별로 PositivePercentage 평균 계산
-        for product in df['product'].unique():
-            product_df = df[df['product'] == product]
+        for product in df['title'].unique():
+            product_df = df[df['title'] == product]
             features = product_df['main_features'].unique()
             # print(easy_to_use_count)
             for feature in features:
                 feature_df = product_df[product_df['main_features'] == feature]
-                if not feature_df.empty and (feature_df['percentOfMainFeatures'].item() >= 5 or feature_df['numOfMainFeatures'].item() >= 50 or (feature_df['percentOfMainFeatures'].item() >= 2.5 and not pd.isnull(feature_df['NegativePercentage'].item()) and feature_df['percentOfMainFeatures'].item() >= 4)):
+                if not feature_df.empty and ((feature_df['percentOfMainFeatures'].item() >= 5 or feature_df['numOfMainFeatures'].item() >= 50) or (feature_df['percentOfMainFeatures'].item() >= 2.5 and not pd.isnull(feature_df['NegativePercentage'].item()) and feature_df['percentOfMainFeatures'].item() >= 4)):
                     # 평균 긍정 및 부정 비율 계산
                     positive_percentage_avg = feature_df['PositivePercentage'].mean()
                     negative_percentage_avg = feature_df['NegativePercentage'].mean()
@@ -192,7 +187,7 @@ class DataAnalysis:
                         negative_score = None
                     
                     # 주요 기능 비율을 기반으로 추가 점수 계산 (최대 1점 추가)
-                    additional_score = (percent_of_main_features_avg / 100) * 3
+                    additional_score = (percent_of_main_features_avg / feature_df['percentOfMainFeatures'].max()) * 3
                     # 종합 점수 계산: 기본 점수 + 추가 점수
                     if positive_score != None:
                         final_score = positive_score + additional_score
@@ -236,4 +231,7 @@ class DataAnalysis:
         """필요시 moveToEachPage()로 Best5 URL and average_review 이용해서 모든 review 가져와서 분석하는 함수 만들기!"""
         
 dataAnalysis = DataAnalysis()
-dataAnalysis.preprocessor()
+df_v2 = dataAnalysis.preprocessor()
+ ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+# best_ten_products = dataAnalysis.bestTenFirst(df_v2)
+# print("Pick Best 10 Products in First Stage")

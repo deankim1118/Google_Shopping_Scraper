@@ -48,20 +48,25 @@ class GooggleScraper(Browser):
         print(f"Congrates! All {self.productName}'s scraping is done!!!")
         
         # Save to Excel file
-        file_path = f"./results/{self.productName}_Raw.csv".replace(" ", "_")
-        df_all_page_details.to_csv(file_path , encoding='utf-8-sig')
+        file_path_Raw = f"./results/{self.productName}_Raw.csv".replace(" ", "_")
+        df_all_page_details.to_csv(file_path_Raw , encoding='utf-8-sig')
         log.info("ALL page's details are saved on file")
         print("ALL page's details are saved on file")
         
-        # 전처리 & 감성분석
+        # Scrap & Raw 에서 features 전처리 & Save as df_V2.csv return V2 dataFrame
         print("Please wait! Data is preprocessing...")
-        dataAnalysis = DataAnalysis(file_path)
-        dataAnalysis.preprocessor()
+        dataAnalysis = DataAnalysis(file_path_Raw)
+        df_V2 = dataAnalysis.preprocessor()
+        log.info("Split Features Column to new columns and save as df_V2.CSV!")
         log.info("ALL Data Preprocessing is done")
+        print("Split Features Column to new columns and save as df_V2.CSV!")
         print("ALL Data Preprocessing is done")
-        ### Data PreProcessing
-        ### CSV file로 받은 다음 전처리!
-        ## pf.drop_duplicates('reviews')를 써주면 중복되는 데이터를 제거할 수 있다.
+        
+        ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+        print("Pick Best 10 Products in First Stage")
+        best_ten_products = dataAnalysis.bestTenFirst(self.df_v2)
+        
+        ## 1-1. Get Url + moveToEachPage + Scrap
 
         #self.driver.quit()
         
