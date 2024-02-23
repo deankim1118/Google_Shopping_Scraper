@@ -66,8 +66,10 @@ class GooggleScraper(Browser):
         print("Pick Best 10 Products in First Stage")
         best_ten_products = dataAnalysis.bestTenFirst(self.df_v2)
         
-        ## 1-1. Get Url + moveToEachPage + Scrap
-
+        ### 2. Get Url + moveToEachReviewPage 
+        ### 2. Scraping Best10 Reviews & ratings, moreBtnClickCount =  average_reviews / 10, maximum 350 리뷰 이하로 Scrap
+        urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
+        eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = 1)
         #self.driver.quit()
         
 googgleScraper = GooggleScraper("baby bed")

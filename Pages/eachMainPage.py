@@ -104,6 +104,40 @@ class EachMainPage():
         df_page_details = pd.concat(df_page_details)
         return df_page_details
         
+        
+    def moveToEachReviewPage(self, urlDataFrame, moreBtnClickCount=1):
+        wait = Browser.wait
+        df_page_details = []
+        df_page_reviews = []
+        pages_num = 0
+        browser = Browser()
+        reviewPage = ReviewPage(self.driver, wait)
+        for page in urlDataFrame:
+            pages_num += 2
+            #Open Browser with get(url)
+            browser.openBrowser(page)
+            ## Wait until Footer of webpage is visible
+            wait.until(EC.visibility_of(self.getPageFooter()))
+            # DataFrame = [제품이름, 평점, 평점갯수, 특징분석단어, {판매처 Top3, 가격}] 가져오기
+            page_detail = pd.DataFrame({
+                            "title": self.getPageTitle(),
+                            "url": page,
+                            "totalRating": self.getPageRating(),
+                            "totalReviews": self.getPageTotalReviews(),
+                            "features": self.getPageFeatures(),
+                            })
+            page_sellers = pd.DataFrame(self.getPageSellers())
+            # Wait until All Reviews Button is clickable
+            wait.until(EC.element_to_be_clickable(self.getPageAllReviews()))
+            self.getPageAllReviews().click()
+            
+            df_page_reviews = reviewPage.getReviewContents(More_BTN_Click_Count= moreBtnClickCount)
+            df_page_concat = pd.concat([page_detail, page_sellers, df_page_reviews], axis=1)
+            df_page_details.append(df_page_concat)
+            ### URL 이 바뀔 때까지 기다려라
+            wait.until(EC.url_changes(page[pages_num]))
+        df_page_details = pd.concat(df_page_details)
+        return df_page_details
 
 """
      ### 각 URL for문으로 돌리기

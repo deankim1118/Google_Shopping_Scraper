@@ -64,9 +64,9 @@ class ReviewPage:
             wait.until(EC.visibility_of_element_located(self.pageFooter))
             self.getMoreReviewsBtn().click()
             time.sleep(0.4)
+            wait.until(EC.presence_of_element_located((By.XPATH, "//div[@id='sh-fp__pagination-button-wrapper']/button/div[@class='_-ik']")))
             wait.until(EC.presence_of_element_located(self.moreReviewsBtn))
             wait.until(EC.text_to_be_present_in_element(self.moreReviewsBtn,'More reviews'))
-            wait.until(EC.presence_of_element_located((By.XPATH, "//div[@id='sh-fp__pagination-button-wrapper']/button/div[@class='_-ik']")))
            
     def scrollTo(self):
         ActionChains(self.driver).scroll_to_element(self.getPageFooter()).perform()

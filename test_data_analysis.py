@@ -4,10 +4,14 @@ import numpy as np
 import pandas as pd
 from textblob import TextBlob
 
+from pages.browser import Browser
+from pages.eachMainPage import EachMainPage
+
 class DataAnalysis:
     def __init__(self, filePath = str) -> None:
         # self.filePath = filePath
         self.filePath = "./results/baby_bed_Raw.csv"
+        
     
     def preprocessor(self):      
         """ 0. Review 제외하고 Scrap & Raw 에서 features 전처리. 
@@ -15,7 +19,7 @@ class DataAnalysis:
                 DataAnalysis.splitMainFeatures(df_raw)
             1. v2.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
                 DataAnalysis.bestTenFirst(df_v2)
-            2. Scraping Best10 Reviews & ratings, moreBtnClickCount =  average_reviews / 10, maximum 350 리뷰 이하로 Scrap
+            2. Scraping Best10 Reviews & ratings
             3. Best10 Sentiment Analysis
             4. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기 
             5. best5의 main_features 점수, Negative Review Percents.
@@ -24,7 +28,7 @@ class DataAnalysis:
         df_raw = pd.read_csv(self.filePath).drop_duplicates().reset_index(drop=True)
         # df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
         ### Save as xlsx Excel file
-        df_raw_xlsx = self.replaceCsvToXlsx()
+        df_raw_xlsx = self.filePath.replace('Raw.csv', 'All.xlsx')
         df_raw.to_excel(df_raw_xlsx ,sheet_name='Raw', index=False, engine='openpyxl')
           
         ### 0. Scrap & Raw 에서 features 전처리.
@@ -33,21 +37,11 @@ class DataAnalysis:
         # df_v2.to_csv(f'{self.filePath.replace('Raw', 'V2')}', encoding='utf-8-sig')
         ## 0-1. V2데이터를 전처리 후에 Product_All.xlsc 의 새로운 Sheet에 저장.
         # Excel writer를 사용하여 Excel 파일로 저장합니다.
-        self.addToExcelSheet(dataFrame = df_v2, sheetName='V2')
-        
-        return df_v2
-    
-    def replaceCsvToXlsx(self):
-        ### Save as xlsx
-        df_raw_xlsx = self.filePath.replace('Raw.csv', 'All.xlsx')
-        return df_raw_xlsx
-    
-    def addToExcelSheet(self, dataFrame, sheetName):
-        df_raw_xlsx = self.replaceCsvToXlsx()
-        # Excel writer를 사용하여 Excel 파일로 저장합니다.
         with pd.ExcelWriter(df_raw_xlsx, engine='openpyxl', mode='a') as writer:
             # 전처리된 데이터를 'V2' 시트에 저장합니다.
-            dataFrame.to_excel(writer, sheet_name=sheetName, index=False)
+            df_v2.to_excel(writer, sheet_name='V2', index=False)
+        
+        return df_v2
         
      ### Sentiment Analysis
     def sentimentAnalysis(self, df):
@@ -121,9 +115,7 @@ class DataAnalysis:
 
         # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
         top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10)
-        # top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
-        self.addToExcelSheet(dataFrame=top_10_products, sheetName='best10')
-  
+        top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
         return top_10_products
         
     # def bestTenProducts(self, df):
@@ -243,6 +235,16 @@ class DataAnalysis:
         
 dataAnalysis = DataAnalysis()
 df_v2 = dataAnalysis.preprocessor()
+ ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+browser = Browser()
+driver = browser.driver
 best_ten_products = dataAnalysis.bestTenFirst(df_v2)
+
 urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
 print(print(f'{urls_best_ten} : {average_reviews}'))
+
+pages = EachMainPage(driver)
+pages.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = 1)
+
+for product in best_ten_products:
+    pass
