@@ -79,7 +79,8 @@ class GooggleScraper(Browser):
         ## 2-2. Scrap Best10 and moreBtnClickCount = Review 합계에 따라서 다르게 하기! Max 29! Total Reviews / 10 - 2
         log.info("Please wait! I'm scraping Best 10 all Reviews...")
         print("Please wait! I'm scraping Best 10 all Reviews...")
-        df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = utility.getMoreBtnNumber(df=best_ten_products, urls_best_ten=urls_best_ten))
+        # df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = utility.getMoreBtnNumber(df=best_ten_products, urls_best_ten=urls_best_ten))
+        df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = 1)
         log.info(f"Congrates! All {self.productName}'s Best 10's scraping is done!!!")
         print(f"Congrates! All {self.productName}'s Best 10's scraping is done!!!")
         ## 2-3 Save as new sheets into df_Raw file.

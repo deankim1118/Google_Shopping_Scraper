@@ -9,8 +9,8 @@ from pages.eachMainPage import EachMainPage
 
 class DataAnalysis:
     def __init__(self, filePath = str) -> None:
-        # self.filePath = filePath
-        self.filePath = "./results/baby_bed_Raw.csv"
+        self.filePath = filePath
+        # self.filePath = "./results/baby_bed_Raw.csv"
         
     
     def preprocessor(self):      
@@ -25,7 +25,7 @@ class DataAnalysis:
             5. best5의 main_features 점수, Negative Review Percents.
         """
 
-        df_raw = pd.read_csv(self.filePath).drop_duplicates().reset_index(drop=True)
+        df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['title', 'features']).reset_index(drop=True)
         # df_review = df_raw[['title','url','seller','price','totalRating','totalReviews','features']]
         ### Save as xlsx Excel file
         df_raw_xlsx = self.filePath.replace('Raw.csv', 'All.xlsx')
@@ -33,14 +33,16 @@ class DataAnalysis:
           
         ### 0. Scrap & Raw 에서 features 전처리.
         df_v2 = self.splitMainFeatures(df_raw)
+        df_v2 = df_v2[df_v2['percentOfMainFeatures'] > 4.4].dropna(subset='percentOfMainFeatures').reset_index(drop=True)
         ## 0-1.Save as csv
+        
         # df_v2.to_csv(f'{self.filePath.replace('Raw', 'V2')}', encoding='utf-8-sig')
         ## 0-1. V2데이터를 전처리 후에 Product_All.xlsc 의 새로운 Sheet에 저장.
         # Excel writer를 사용하여 Excel 파일로 저장합니다.
         with pd.ExcelWriter(df_raw_xlsx, engine='openpyxl', mode='a') as writer:
             # 전처리된 데이터를 'V2' 시트에 저장합니다.
             df_v2.to_excel(writer, sheet_name='V2', index=False)
-        
+            
         return df_v2
         
      ### Sentiment Analysis
@@ -233,30 +235,30 @@ class DataAnalysis:
         
         """필요시 moveToEachPage()로 Best5 URL and average_review 이용해서 모든 review 가져와서 분석하는 함수 만들기!"""
         
-dataAnalysis = DataAnalysis()
+dataAnalysis = DataAnalysis("./results/baby_double_strollers_Raw.csv")
 df_v2 = dataAnalysis.preprocessor()
- ### 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
+## 1. V2 데이터프레임에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
 browser = Browser()
 driver = browser.driver
 best_ten_products = dataAnalysis.bestTenFirst(df_v2)
-urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
+# urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
 
-def getMoreBtnNumber(df, urls_best_ten):
-    # baby_bed_bestTen DataFrame에서 해당 URL이 있는 행 찾기
-    matching_row = df[df['url'] == urls_best_ten]
+# def getMoreBtnNumber(df, urls_best_ten):
+#     # baby_bed_bestTen DataFrame에서 해당 URL이 있는 행 찾기
+#     matching_row = df[df['url'] == urls_best_ten]
 
-    # 해당 행이 존재하면 average_reviews 값 추출 및 함수 호출
-    if not matching_row.empty:
-        average_reviews = matching_row.iloc[0]['average_reviews']
-        if average_reviews >= 330:
-            moreBtnClickCount = 29
-        else:
-            moreBtnClickCount = int(average_reviews / 10 - 3)
-    return moreBtnClickCount
+#     # 해당 행이 존재하면 average_reviews 값 추출 및 함수 호출
+#     if not matching_row.empty:
+#         average_reviews = matching_row.iloc[0]['average_reviews']
+#         if average_reviews >= 330:
+#             moreBtnClickCount = 29
+#         else:
+#             moreBtnClickCount = int(average_reviews / 10 - 3)
+#     return moreBtnClickCount
 
 
-pages = EachMainPage(driver)
-pages.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = getMoreBtnNumber(best_ten_products, urls_best_ten))
+# pages = EachMainPage(driver)
+# pages.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = 2)
 
 # def test2(urls_best_ten):
 #     for url in urls_best_ten:

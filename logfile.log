@@ -152,3 +152,16 @@
 2024-02-23 13:55:41,609 :INFO : runScraper :Got all product's URLs
 2024-02-23 13:55:41,609 :INFO : runScraper :26 of double strollers are filtered out
 2024-02-23 14:00:42,567 :INFO : runScraper :double strollers is searched on Google
+2024-02-25 16:08:32,696 :INFO : runScraper :double strollers is searched on Google
+2024-02-25 16:08:35,018 :INFO : runScraper :Toggled rating 4 and up
+2024-02-25 16:08:35,767 :INFO : runScraper :Got all product's URLs
+2024-02-25 16:08:35,767 :INFO : runScraper :23 of double strollers are filtered out
+2024-02-25 16:08:35,767 :INFO : runScraper :Please wait! I'm scraping all products...
+2024-02-25 16:09:37,133 :INFO : runScraper :Congrates! All double strollers's scraping is done!!!
+2024-02-25 16:09:37,137 :INFO : runScraper :ALL page's details are saved on file
+2024-02-25 16:09:37,328 :INFO : runScraper :Split Features Column to new columns and save as df_V2.CSV!
+2024-02-25 16:09:37,328 :INFO : runScraper :ALL Data Preprocessing is done
+2024-02-25 16:09:37,328 :INFO : runScraper :Pick Best 10 Products in First Stage...
+2024-02-25 16:09:37,397 :INFO : runScraper :We Pick All Best 10 Products!
+2024-02-25 16:09:37,397 :INFO : runScraper :Please wait! I'm scraping Best 10 all Reviews...
+2024-02-25 16:10:39,277 :INFO : runScraper :Congrates! All double strollers's Best 10's scraping is done!!!

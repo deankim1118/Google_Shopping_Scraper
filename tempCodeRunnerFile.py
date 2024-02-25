@@ -1,1 +1,1 @@
-df_all_product_urls
+df = df[df['percentOfMainFeatures'] >= 4.1].dropna()
