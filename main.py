@@ -94,12 +94,16 @@ class GooggleScraper(Browser):
         df_sentiment = dataAnalysis.preprocessorBestTen()
         log.info("Congrates! Save All Best 10 Sentiment Analysis are saved into NEW SHEET!!!")
         print("Congrates! Save All Best 10 Sentiment Analysis are saved into NEW SHEET!!!")
-        ### 4. best10의 main_features Features Score
+        
+        ### 4. Best10의 main_features Features Score
         log.info("Please wait! I'm calculating Best 10 feature scores...")
         print("Please wait! I'm calculating Best 10 feature scores...")
-        df_feature_score = dataAnalysis.calScore(df_sentiment)
+        df_feature_score = dataAnalysis.calScore(df_sentiment,percentEachFeature=4.5)
         log.info("Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!")
         print("Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!")
+        
+        ### 5. Best5 뽑기
+        df_best_five = dataAnalysis.bestFive(df_feature_score)
         
 googgleScraper = GooggleScraper("double strollers")
 googgleScraper.runScraper()
