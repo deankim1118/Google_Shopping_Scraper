@@ -79,14 +79,27 @@ class GooggleScraper(Browser):
         ## 2-2. Scrap Best10 and moreBtnClickCount = Review 합계에 따라서 다르게 하기! Max 29! Total Reviews / 10 - 2
         log.info("Please wait! I'm scraping Best 10 all Reviews...")
         print("Please wait! I'm scraping Best 10 all Reviews...")
-        # df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = utility.getMoreBtnNumber(df=best_ten_products, urls_best_ten=urls_best_ten))
-        df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = 1)
+        df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = utility.getMoreBtnNumber(df=best_ten_products, urls_best_ten=urls_best_ten))
         log.info(f"Congrates! All {self.productName}'s Best 10's scraping is done!!!")
         print(f"Congrates! All {self.productName}'s Best 10's scraping is done!!!")
         ## 2-3 Save as new sheets into df_Raw file.
         dataAnalysis.addToExcelSheet(df_best_ten_reviews, 'reviews')
+        log.info(f"Congrates! Save All {self.productName}'s Best 10 reviews are saved into NEW SHEET!!!")
         print(f"Congrates! Save All {self.productName}'s Best 10 reviews are saved into NEW SHEET!!!")
         #self.driver.quit()
+        
+        ### 3. Best10 Sentiment Analysis
+        log.info("Please wait! I'm analizing Best 10 Sentiment Analysis...")
+        print("Please wait! I'm analizing Best 10 Sentiment Analysis...")
+        df_sentiment = dataAnalysis.preprocessorBestTen()
+        log.info("Congrates! Save All Best 10 Sentiment Analysis are saved into NEW SHEET!!!")
+        print("Congrates! Save All Best 10 Sentiment Analysis are saved into NEW SHEET!!!")
+        ### 4. best10의 main_features Features Score
+        log.info("Please wait! I'm calculating Best 10 feature scores...")
+        print("Please wait! I'm calculating Best 10 feature scores...")
+        df_feature_score = dataAnalysis.calScore(df_sentiment)
+        log.info("Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!")
+        print("Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!")
         
 googgleScraper = GooggleScraper("double strollers")
 googgleScraper.runScraper()

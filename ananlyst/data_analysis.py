@@ -17,9 +17,9 @@ class DataAnalysis:
             1. v2.csv에서 (totalRating,totalReviews,PosNegMainFeatures,percentOfMainFeatures)로 Best 10 뽑기
                 DataAnalysis.bestTenFirst(df_v2)
             2. Scraping Best10 Reviews & ratings, moreBtnClickCount =  average_reviews / 10, maximum 300 리뷰 이하로 Scrap
-            3. Best10 Sentiment Analysis
-            4. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기 
-            5. best5의 main_features 점수, Negative Review Percents.
+            3. Best10 Sentiment Analysis 
+            4. best10의 main_features Score
+            5. 1번 방법 + ratings.mean() + sentiment.mean() 으로 Best5 뽑기
         """
 
         df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['title', 'features']).reset_index(drop=True)
@@ -71,9 +71,10 @@ class DataAnalysis:
                 
         df_copy = df.copy()
         df_copy['sentimentAnalysis'] = sentimentAnalysis
-        df = df_copy.query("sentimentAnalysis != 0")
+        df_sentiment = df_copy.query("sentimentAnalysis != 0")
+        self.addToExcelSheet(df_sentiment, 'sentiment')
 
-        return df
+        return df_sentiment
         
     def splitMainFeatures(self, df):
         split_features = df['features'].str.split('(', expand= True)
@@ -113,7 +114,7 @@ class DataAnalysis:
         # 리뷰 수의 로그 변환 적용
         product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews']) # 총 리뷰수
         # 로그 변환된 리뷰 수를 정규화할 필요가 없으므로, 직접 종합 점수 계산에 포함
-        product_analysis['final_score'] = (
+        product_analysis['finalFeatureScore'] = (
             product_analysis['average_total_rating'] / 5 * 1.0 +  # 총 평점! 5점 만점으로 정규화된 점수 
             product_analysis['sum_positive_percentOfMainFeatures'] / product_analysis['sum_positive_percentOfMainFeatures'].max() * 1.5 +  # 긍정 키워드 비율 5점 만점으로 정규화된 점수
             product_analysis['positive_positive_review_percentage'] / 100 * 1.0 +  # 긍정 키워드 감성분석 비율 5점 만점으로 정규화된 점수
@@ -123,12 +124,27 @@ class DataAnalysis:
          # data['score'] = data.apply(lambda x: ((x['percentOfMainFeatures'] / 100) * 2.5 + (x['positive_review_percentage'] / 100) * 2.5) if pd.notnull(x['positive_review_percentage']) else 0, axis=1)
 
         # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
-        top_10_products = product_analysis.sort_values(by='final_score', ascending=False).head(10).reset_index(drop=True)
+        top_10_products = product_analysis.sort_values(by='finalFeatureScore', ascending=False).head(10).reset_index(drop=True)
         # top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
         self.addToExcelSheet(dataFrame=top_10_products, sheetName='best10')
   
         return top_10_products
         
+    def preprocessorBestTen(self):      
+        ## Read Review Excel File
+        df_reviews = pd.read_excel("./results/double_strollers_All.xlsx", 'reviews').drop_duplicates(subset=['title', 'reviews']).reset_index(drop=True)
+        df_reviews = df_reviews[['title','url','seller','price','totalRating','totalReviews','features','reviews']]
+    
+        ### 0.  features 전처리.
+        df_v3 = self.splitMainFeatures(df_reviews)
+        ### 0-1. percentOfMainFeatures < 4.9 이하 지우기
+        
+        ## 0-2. V2데이터를 전처리 후에 Product_All.xlsc 의 새로운 Sheet에 저장.
+        ## 0-2. Excel writer를 사용하여 Excel 파일로 저장합니다.
+        # self.addToExcelSheet(dataFrame = df_v3, sheetName='V3')
+        df_sentiment = self.sentimentAnalysis(df_v3)
+        
+        return df_sentiment
     # def bestTenProducts(self, df):
     #     # 'positive_sentiment' 컬럼 추가: 1은 긍정, -1은 부정
     #     df['positive_sentiment'] = df['sentimentAnalysis'].apply(lambda x: 1 if x == 1 else 0)
@@ -145,14 +161,14 @@ class DataAnalysis:
     #     product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews'])
     #     # 로그 변환된 리뷰 수를 정규화할 필요가 없으므로, 직접 종합 점수 계산에 포함
     #     product_analysis['normalized_sentiment'] = product_analysis['positive_sentiment_rate'] * 5
-    #     product_analysis['final_score'] = (
+    #     product_analysis['finalFeatureScore'] = (
     #         product_analysis['average_total_rating'] / 5 * 2.0 +  # 5점 만점으로 정규화된 점수
     #         product_analysis['average_rating'] / 5 * 2.0 +  # 5점 만점으로 정규화된 점수
     #         product_analysis['normalized_sentiment'] / 5 * 3.0 +  # 5점 만점으로 정규화된 점수
     #         product_analysis['log_reviews'] / product_analysis['log_reviews'].max() * 3.0  # 최대 로그 리뷰 점수로 정규화
     #     ) * 10 / (2.0 + 2.0 + 3.0 + 3.0) 
     #     # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 10개 제품 선정
-    #     top_10_products_log = product_analysis.sort_values(by='final_score', ascending=False).head(10)
+    #     top_10_products_log = product_analysis.sort_values(by='finalFeatureScore', ascending=False).head(10)
     #     # Save to file
     #     top_10_products_log.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
         
@@ -168,6 +184,7 @@ class DataAnalysis:
             return None   
     # 각 제품별 주요 기능의 긍정 비율, 평균 평점, 그리고 주요 기능 비율을 기반으로 종합 점수 계산
     def calScore(self, df):
+        # df_v3 = df_v3[df_v3['percentOfMainFeatures'] > 4.9].dropna(subset='percentOfMainFeatures').reset_index(drop=True)
        
         # "PosNegMainFeatures" 컬럼에서 긍정 및 부정 비율을 추출하고 저장
         df['PositivePercentage'] = df['PosNegMainFeatures'].apply(lambda x: self.extract_percentage(x, r'(\d+)% of the reviews are positive'))
@@ -183,7 +200,8 @@ class DataAnalysis:
             # print(easy_to_use_count)
             for feature in features:
                 feature_df = product_df[product_df['main_features'] == feature]
-                if not feature_df.empty and ((feature_df['percentOfMainFeatures'].item() >= 5 or feature_df['numOfMainFeatures'].item() >= 50) or (feature_df['percentOfMainFeatures'].item() >= 2.5 and not pd.isnull(feature_df['NegativePercentage'].item()) and feature_df['percentOfMainFeatures'].item() >= 4)):
+                if not feature_df.empty and feature_df['percentOfMainFeatures'].item() >= 4.5:
+                    row_index = feature_df.index[0]
                     # 평균 긍정 및 부정 비율 계산
                     positive_percentage_avg = feature_df['PositivePercentage'].mean()
                     negative_percentage_avg = feature_df['NegativePercentage'].mean()
@@ -196,56 +214,88 @@ class DataAnalysis:
                         positive_score = None
                     
                     if not pd.isnull(negative_percentage_avg):
-                        negative_score = 5 - (negative_percentage_avg / 100) * 4.5
+                        negative_score = 5 - (negative_percentage_avg / 100) * 3
                     else:
                         negative_score = None
                     
                     # 주요 기능 비율을 기반으로 추가 점수 계산 (최대 1점 추가)
-                    additional_score = (percent_of_main_features_avg / feature_df['percentOfMainFeatures'].max()) * 3
+                    additional_score = (percent_of_main_features_avg / df['percentOfMainFeatures'].max()) * 2
                     # 종합 점수 계산: 기본 점수 + 추가 점수
                     if positive_score != None:
-                        final_score = positive_score + additional_score
+                        finalFeatureScore = positive_score + additional_score
                     elif negative_score != None:
-                        final_score = negative_score - additional_score
+                        finalFeatureScore = negative_score - additional_score
                     # 점수를 5점 만점으로 제한
-                    final_score = min(final_score, 5)
+                    finalFeatureScore = min(finalFeatureScore, 5)
                     # 결과 저장
                     product_feature_scores[product][feature] = {
                         'PositiveScore': positive_score,
                         'NegativeScore': negative_score,
-                        'FinalScore': round(final_score, 2),
+                        'FinalScore': round(finalFeatureScore, 2),
                         'PosNegPercentage' : feature_df['percentOfMainFeatures'].mean(),
                     }
+                    df.loc[row_index, 'finalFeatureScore'] = round(finalFeatureScore, 2)
+        self.addToExcelSheet(df, 'finalFeatureScore')
+        return df
                     
-        # DataFrame으로 변환
-        results = []
-        for product, features in product_feature_scores.items():
-            for feature, scores in features.items():
-                results.append({
-                    'Product': product,
-                    'Feature': feature,
-                    'PositiveScore': scores['PositiveScore'],
-                    'NegativeScore': scores['NegativeScore'],
-                    'FinalScore': scores['FinalScore'],
-                    'PosNegPercentage' : scores['PosNegPercentage'],
-                })
-        df_score = pd.DataFrame(results)
-        # Add the "Easy to use score" to the DataFrame
-        df_score.to_csv(f'{self.filePath.replace('Raw', 'ScoreByFeature')}', encoding='utf-8-sig')
-                    
-        print(df_score.info())
+        # # DataFrame으로 변환
+        # results = []
+        # for product, features in product_feature_scores.items():
+        #     for feature, scores in features.items():
+        #         results.append({
+        #             'Product': product,
+        #             'Feature': feature,
+        #             'PositiveScore': scores['PositiveScore'],
+        #             'NegativeScore': scores['NegativeScore'],
+        #             'FinalScore': scores['FinalScore'],
+        #             'PosNegPercentage' : scores['PosNegPercentage'],
+        #         })
+        # df_score = pd.DataFrame(results)
+        # # Add the "Easy to use score" to the DataFrame
+        # df_score.to_csv(f'{self.filePath.replace('Raw', 'ScoreByFeature')}', encoding='utf-8-sig')
+    
+    def bestFive(self, df):
+        # PosNegMainFeatures에서 긍정 리뷰의 비율을 숫자로 변환
+        df_score = df.copy()
+        df_score['positive_review_percentage'] = df_score['PosNegMainFeatures'].apply(lambda x: float(x.split('%')[0]) if "positive" in x else None)
+        df_score = df_score.dropna(subset=['positive_review_percentage']).reset_index(drop=True)
+       
+        # 각 제품별로 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 계산
+        product_analysis = df_score.groupby(['title', 'url']).agg(
+            average_total_rating=('totalRating', 'mean'),
+            average_reviews=('totalReviews', 'mean'),
+            sum_positive_percentOfMainFeatures=('percentOfMainFeatures', 'sum'),
+            positive_positive_review_percentage=('positive_review_percentage', 'mean'),
+        ).reset_index()
+        ### 'main_features','percentOfMainFeatures','PosNegMainFeatures'
+        # 리뷰 수의 로그 변환 적용
+        product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews']) # 총 리뷰수
+        # 로그 변환된 리뷰 수를 정규화할 필요가 없으므로, 직접 종합 점수 계산에 포함
+        product_analysis['finalFeatureScore'] = (
+            product_analysis['average_total_rating'] / 5 * 1.0 +  # 총 평점! 5점 만점으로 정규화된 점수 
+            product_analysis['sum_positive_percentOfMainFeatures'] / product_analysis['sum_positive_percentOfMainFeatures'].max() * 1.5 +  # 긍정 키워드 비율 5점 만점으로 정규화된 점수
+            product_analysis['positive_positive_review_percentage'] / 100 * 1.0 +  # 긍정 키워드 감성분석 비율 5점 만점으로 정규화된 점수
+            product_analysis['log_reviews'] / product_analysis['log_reviews'].max() * 1.5  # 최대 로그 리뷰 점수로 정규화
+        ) #* 10 / (2.0 + 3.0 + 2.0 + 3.0)
+        
+         # data['score'] = data.apply(lambda x: ((x['percentOfMainFeatures'] / 100) * 2.5 + (x['positive_review_percentage'] / 100) * 2.5) if pd.notnull(x['positive_review_percentage']) else 0, axis=1)
 
-        # # 결과 출력 (모든 제품에 대한 출력은 과도할 수 있으므로 첫 2개 제품의 결과만 예시로 보여줍니다)
-        # for product, features_scores in list(product_feature_scores.items())[:2]:
-        #     print(f"Product: {product}")
-        #     for feature, score in features_scores.items():
-        #         print(f"  - {feature}: {score:.2f}점")
-        #     print("\n")
-        
-        """필요시 moveToEachPage()로 Best5 URL and average_review 이용해서 모든 review 가져와서 분석하는 함수 만들기!"""
-        
-# dataAnalysis = DataAnalysis("./results/baby_double_strollers_Raw.csv")
+        # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
+        top_5_products = product_analysis.sort_values(by='finalFeatureScore', ascending=False).head(10).reset_index(drop=True)
+        # top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
+        self.addToExcelSheet(dataFrame=top_5_products, sheetName='best10')
+  
+        return top_5_products
+    
+dataAnalysis = DataAnalysis("./results/double_strollers_Raw.csv")
 # df_v2 = dataAnalysis.preprocessor()
 # best_ten_products = dataAnalysis.bestTenFirst(df_v2)
-# urls_best_ten, average_reviews = best_ten_products['url'], best_ten_products['average_reviews']
-# print(print(f'{urls_best_ten} : {average_reviews}'))
+# dataAnalysis.preprocessorBestTen()
+df_sentiment = pd.read_excel("./results/double_strollers_All.xlsx", 'sentiment')
+df_feature_score = dataAnalysis.calScore(df_sentiment)
+print(df_feature_score.head())
+
+# df_sentiment['PositivePercentage'] = df_sentiment['PosNegMainFeatures'].apply(lambda x: dataAnalysis.extract_percentage(x, r'(\d+)% of the reviews are positive'))
+# df_sentiment['NegativePercentage'] = df_sentiment['PosNegMainFeatures'].apply(lambda x: dataAnalysis.extract_percentage(x, r'(\d+)% of the reviews are negative'))
+
+# print(df_sentiment['PositivePercentage'])
