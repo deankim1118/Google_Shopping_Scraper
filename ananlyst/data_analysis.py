@@ -288,15 +288,15 @@ class DataAnalysis:
         print(df_top_5_details.head())
         return df_top_5_details
     
-dataAnalysis = DataAnalysis("./results/double_strollers_Raw.csv")
+# dataAnalysis = DataAnalysis("./results/double_strollers_Raw.csv")
 # df_sentiment = dataAnalysis.preprocessorBestTen()
 # df_feature_score = dataAnalysis.calScore(df_sentiment)
 # df_v2 = pd.read_excel("./results/baby_double_strollers_All.xlsx", 'V2')
 # best_ten_products = dataAnalysis.bestTenFirst(df_v2)
 # dataAnalysis.preprocessorBestTen()
 # df_sentiment = pd.read_excel("./results/double_strollers_All.xlsx", 'sentiment')
-df_feature_score = pd.read_excel("./results/double_strollers_All.xlsx", 'finalFeatureScore')
-dataAnalysis.bestFive(df_feature_score)
+# df_feature_score = pd.read_excel("./results/double_strollers_All.xlsx", 'finalFeatureScore')
+# dataAnalysis.bestFive(df_feature_score)
 # print(df_feature_score.head())
 
 # df_sentiment['PositivePercentage'] = df_sentiment['PosNegMainFeatures'].apply(lambda x: dataAnalysis.extract_percentage(x, r'(\d+)% of the reviews are positive'))

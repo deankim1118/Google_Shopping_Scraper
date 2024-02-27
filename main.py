@@ -103,7 +103,11 @@ class GooggleScraper(Browser):
         print("Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!")
         
         ### 5. Best5 뽑기
+        log.info("Please wait! Pick Best 5 products ...")
+        print("Please wait! Pick Best 5 products ...")
         df_best_five = dataAnalysis.bestFive(df_feature_score)
+        log.info(f"Congrates! We Pick {self.productName}'s Best 5!!!")
+        print(f"Congrates! We Pick {self.productName}'s Best 5!!!")
         
 googgleScraper = GooggleScraper("double strollers")
 googgleScraper.runScraper()
