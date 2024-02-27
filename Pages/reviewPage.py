@@ -55,7 +55,7 @@ class ReviewPage:
     ######## Scroll & Click ########      
     def waitAndClickMore(self, wait, btnClickCount):
         for count in range(btnClickCount):
-            #driver.execute_script("window.scrollBy(0,document.body.scrollHeight)")
+            # self.driver.execute_script("window.scrollBy(0,document.body.scrollHeight)")
             ActionChains(self.driver).scroll_to_element(self.getMoreReviewsBtn()).perform()
             wait.until(EC.visibility_of_element_located(self.moreReviewsBtn))
             # wait.until(EC.element_to_be_clickable(self.getMoreReviewsBtn()))
@@ -65,15 +65,14 @@ class ReviewPage:
             self.getMoreReviewsBtn().click()
             time.sleep(0.4)
             wait.until(EC.presence_of_element_located((By.XPATH, "//div[@id='sh-fp__pagination-button-wrapper']/button/div[@class='_-ik']")))
-            wait.until(EC.presence_of_element_located(self.moreReviewsBtn))
-            # wait.until(EC.text_to_be_present_in_element(self.moreReviewsBtn,'More reviews'))
+            # wait.until(EC.presence_of_element_located(self.moreReviewsBtn))
+            wait.until(EC.text_to_be_present_in_element(self.moreReviewsBtn,'More reviews'))
            
     def scrollTo(self):
         ActionChains(self.driver).scroll_to_element(self.getPageFooter()).perform()
     ######## Get Reviews and Ratings ########
     # More_BTN_Click_Count = 23
     def getReviewContents(self, More_BTN_Click_Count):
-        print(More_BTN_Click_Count)
         df_page_reviews = []
         product = self.getProductName()
         # Scroll and Click More Button

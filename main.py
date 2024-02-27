@@ -39,7 +39,7 @@ class GooggleScraper(Browser):
         
         # get URL List in Pandas DataFrame 평점갯수 > 200 필터링
         print(f"Please Wait! {self.productName} are filtering")
-        df_all_product_urls = homePage.intoDataFrame(allProducts=list_all_products, ratingFilterNum=250)
+        df_all_product_urls = homePage.intoDataFrame(allProducts=list_all_products, ratingFilterNum=350)
         log.info(f"{len(df_all_product_urls)} of {self.productName} are filtered out")
         print(f"{len(df_all_product_urls)} of {self.productName} are filtered out")
         
@@ -109,5 +109,5 @@ class GooggleScraper(Browser):
         log.info(f"Congrates! We Pick {self.productName}'s Best 5!!!")
         print(f"Congrates! We Pick {self.productName}'s Best 5!!!")
         
-googgleScraper = GooggleScraper("double strollers")
+googgleScraper = GooggleScraper("espresso machines under $1000")
 googgleScraper.runScraper()

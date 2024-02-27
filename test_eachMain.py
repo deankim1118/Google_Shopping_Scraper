@@ -1,12 +1,13 @@
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from .browser import Browser
+from pages.browser import Browser
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from .reviewPage import ReviewPage
-
+from pages.reviewPage import ReviewPage
+from ananlyst.data_analysis import DataAnalysis
+from utilites.utility import Utility
 
 class EachMainPage():
     def __init__(self, driver):
@@ -149,3 +150,13 @@ class EachMainPage():
     ### More reviews.Click() 몇번 클릭할지 고민해보기
     ### Riview 가져올 때 작성자 꼭 넣기! 나중에 데이터를 추가 할때 작성자가 똑같으면 중복데이터를 방지할 수 있다.
 """
+
+# browser = Browser()
+# driver = browser.driver
+# eachMainPage = EachMainPage(driver)
+# df_v3 = pd.read_excel("./results/espresso_machines_under_$1000_All.xlsx", 'best10')
+# urls_best_ten = df_v3['url']
+# df_best_ten_reviews = eachMainPage.moveToEachReviewPage(urls_best_ten, moreBtnClickCount = Utility().getMoreBtnNumber(df=df_v3, urls_best_ten=urls_best_ten))
+# ## 2-3 Save as new sheets into df_Raw file.
+# dataAnalysis = DataAnalysis("./results/espresso_machines_under_$1000_Raw.csv")
+# dataAnalysis.addToExcelSheet(df_best_ten_reviews, 'reviews')
