@@ -20,7 +20,6 @@ class DataAnalysis:
             3. Best10 Sentiment Analysis 
             4. Best10의 main_features Score
             5. Best5 뽑기
-            6. Best5의 main_feature, featureScore, percentOfMainFeatures 가져오기 bestFive()실행 후
         """
 
         df_raw = pd.read_csv(self.filePath).drop_duplicates(subset=['title', 'features']).reset_index(drop=True)
@@ -284,9 +283,10 @@ class DataAnalysis:
         # top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
         
         df_merge = pd.merge(top_5_products, df_score[['product', 'url', 'main_features','percentOfMainFeatures','PosNegMainFeatures','NegativePercentage','finalFeatureScore']], on=['product', 'url'], how='left')
-        self.addToExcelSheet(dataFrame=df_merge, sheetName='best5')
-        print(df_merge.head())
-        return df_merge
+        df_top_5_details = df_merge[['product', 'url','average_total_rating', 'average_reviews', 'main_features', 'NegativePercentage', 'percentOfMainFeatures', 'PosNegMainFeatures', 'finalFeatureScore','final_score']]
+        self.addToExcelSheet(dataFrame=df_top_5_details, sheetName='best5')
+        print(df_top_5_details.head())
+        return df_top_5_details
     
 dataAnalysis = DataAnalysis("./results/double_strollers_Raw.csv")
 # df_sentiment = dataAnalysis.preprocessorBestTen()
