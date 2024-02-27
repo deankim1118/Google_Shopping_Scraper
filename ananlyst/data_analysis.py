@@ -262,26 +262,31 @@ class DataAnalysis:
             average_total_rating=('totalRating', 'mean'),
             average_reviews=('totalReviews', 'mean'),
             average_feature_score=('finalFeatureScore', 'mean'),
-            positive_sentiment_rate=('sentimentAnalysis', 'mean')
+            positive_sentiment_rate=('sentimentAnalysis', 'mean'),
         ).reset_index()
+        
+        
+        
 
         # 리뷰 수의 로그 변환 적용
         product_analysis['log_reviews'] = np.log1p(product_analysis['average_reviews']) # 총 리뷰수
         # 로그 변환된 리뷰 수를 정규화할 필요가 없으므로, 직접 종합 점수 계산에 포함
         product_analysis['normalized_sentiment'] = product_analysis['positive_sentiment_rate'] * 5
-        product_analysis['final_score'] = (
+        product_analysis['final_score'] = round(
             product_analysis['log_reviews'] / product_analysis['log_reviews'].max() * 1.0 + # 총 리뷰 수! 최대 로그 리뷰 점수로 정규화 
             product_analysis['average_total_rating'] / 5 * 1.5 +  # 총 평점! 5점 만점으로 정규화된 점수 
-            product_analysis['average_feature_score'] / 5 * 1.5 +  # Feature Score! 5점 만점으로 정규화된 점수
-            product_analysis['normalized_sentiment'] / 5 * 1.0  # 긍정 키워드 감성분석 비율 5점 만점으로 정규화된 점수
-        ) #* 10 / (2.0 + 3.0 + 2.0 + 3.0)
-
+            product_analysis['average_feature_score'] / 5 * 2.0 +  # Feature Score! 5점 만점으로 정규화된 점수
+            product_analysis['normalized_sentiment'] / 5 * 0.5  # 긍정 키워드 감성분석 비율 5점 만점으로 정규화된 점수
+        , ndigits = 2) #* 10 / (2.0 + 3.0 + 2.0 + 3.0)
+        
         # 평균 총 평점, 총 리뷰 수, 긍정적 감성 비율을 기준으로 상위 5개 제품 선정
         top_5_products = product_analysis.sort_values(by='final_score', ascending=False).head(5).reset_index(drop=True)
         # top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
-        self.addToExcelSheet(dataFrame=top_5_products, sheetName='best5')
-  
-        return top_5_products
+        
+        df_merge = pd.merge(top_5_products, df_score[['product', 'url', 'main_features','percentOfMainFeatures','PosNegMainFeatures','NegativePercentage','finalFeatureScore']], on=['product', 'url'], how='left')
+        self.addToExcelSheet(dataFrame=df_merge, sheetName='best5')
+        print(df_merge.head())
+        return df_merge
     
 dataAnalysis = DataAnalysis("./results/double_strollers_Raw.csv")
 # df_sentiment = dataAnalysis.preprocessorBestTen()
