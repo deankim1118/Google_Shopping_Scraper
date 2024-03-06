@@ -109,5 +109,5 @@ class GooggleScraper(Browser):
         log.info(f"Congrates! We Pick {self.productName}'s Best 5!!!")
         print(f"Congrates! We Pick {self.productName}'s Best 5!!!")
         
-googgleScraper = GooggleScraper("espresso machines under $1000")
+googgleScraper = GooggleScraper("deep fryer over 1lb")
 googgleScraper.runScraper()

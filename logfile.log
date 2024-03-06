@@ -281,3 +281,43 @@
 2024-02-27 01:14:58,304 :INFO : runScraper :Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!
 2024-02-27 01:14:58,304 :INFO : runScraper :Please wait! Pick Best 5 products ...
 2024-02-27 01:14:59,195 :INFO : runScraper :Congrates! We Pick espresso machines under $1000's Best 5!!!
+2024-03-05 11:53:59,239 :INFO : runScraper :deep fryer is searched on Google
+2024-03-05 11:54:02,474 :INFO : runScraper :Toggled rating 4 and up
+2024-03-05 11:54:03,246 :INFO : runScraper :Got all product's URLs
+2024-03-05 11:54:03,255 :INFO : runScraper :11 of deep fryer are filtered out
+2024-03-05 11:54:03,255 :INFO : runScraper :Please wait! I'm scraping all products...
+2024-03-05 11:54:33,849 :INFO : runScraper :Congrates! All deep fryer's scraping is done!!!
+2024-03-05 11:54:33,854 :INFO : runScraper :ALL page's details are saved on file
+2024-03-05 11:54:34,042 :INFO : runScraper :Split Features Column to new columns and save as df_V2.CSV!
+2024-03-05 11:54:34,042 :INFO : runScraper :ALL Data Preprocessing is done
+2024-03-05 11:54:34,043 :INFO : runScraper :Pick Best 10 Products in First Stage...
+2024-03-05 11:54:34,091 :INFO : runScraper :We Pick All Best 10 Products!
+2024-03-05 11:54:34,091 :INFO : runScraper :Please wait! I'm scraping Best 10 all Reviews...
+2024-03-05 11:57:36,964 :INFO : runScraper :Congrates! All deep fryer's Best 10's scraping is done!!!
+2024-03-05 11:57:37,172 :INFO : runScraper :Congrates! Save All deep fryer's Best 10 reviews are saved into NEW SHEET!!!
+2024-03-05 11:57:37,172 :INFO : runScraper :Please wait! I'm analizing Best 10 Sentiment Analysis...
+2024-03-05 11:57:37,940 :INFO : runScraper :Congrates! Save All Best 10 Sentiment Analysis are saved into NEW SHEET!!!
+2024-03-05 11:57:37,940 :INFO : runScraper :Please wait! I'm calculating Best 10 feature scores...
+2024-03-05 11:57:38,479 :INFO : runScraper :Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!
+2024-03-05 11:57:38,480 :INFO : runScraper :Please wait! Pick Best 5 products ...
+2024-03-05 11:57:38,930 :INFO : runScraper :Congrates! We Pick deep fryer's Best 5!!!
+2024-03-05 16:35:15,158 :INFO : runScraper :deep fryer over 1lb is searched on Google
+2024-03-05 16:35:18,320 :INFO : runScraper :Toggled rating 4 and up
+2024-03-05 16:35:19,055 :INFO : runScraper :Got all product's URLs
+2024-03-05 16:35:19,069 :INFO : runScraper :18 of deep fryer over 1lb are filtered out
+2024-03-05 16:35:19,069 :INFO : runScraper :Please wait! I'm scraping all products...
+2024-03-05 16:35:49,039 :INFO : runScraper :Congrates! All deep fryer over 1lb's scraping is done!!!
+2024-03-05 16:35:49,039 :INFO : runScraper :ALL page's details are saved on file
+2024-03-05 16:35:49,269 :INFO : runScraper :Split Features Column to new columns and save as df_V2.CSV!
+2024-03-05 16:35:49,269 :INFO : runScraper :ALL Data Preprocessing is done
+2024-03-05 16:35:49,269 :INFO : runScraper :Pick Best 10 Products in First Stage...
+2024-03-05 16:35:49,305 :INFO : runScraper :We Pick All Best 10 Products!
+2024-03-05 16:35:49,305 :INFO : runScraper :Please wait! I'm scraping Best 10 all Reviews...
+2024-03-05 16:40:00,844 :INFO : runScraper :Congrates! All deep fryer over 1lb's Best 10's scraping is done!!!
+2024-03-05 16:40:01,178 :INFO : runScraper :Congrates! Save All deep fryer over 1lb's Best 10 reviews are saved into NEW SHEET!!!
+2024-03-05 16:40:01,178 :INFO : runScraper :Please wait! I'm analizing Best 10 Sentiment Analysis...
+2024-03-05 16:40:02,493 :INFO : runScraper :Congrates! Save All Best 10 Sentiment Analysis are saved into NEW SHEET!!!
+2024-03-05 16:40:02,493 :INFO : runScraper :Please wait! I'm calculating Best 10 feature scores...
+2024-03-05 16:40:03,376 :INFO : runScraper :Congrates! Save All Best 10 Feature Score are saved into NEW SHEET!!!
+2024-03-05 16:40:03,377 :INFO : runScraper :Please wait! Pick Best 5 products ...
+2024-03-05 16:40:04,078 :INFO : runScraper :Congrates! We Pick deep fryer over 1lb's Best 5!!!

@@ -283,8 +283,8 @@ class DataAnalysis:
         top_5_products = product_analysis.sort_values(by='final_score', ascending=False).head(5).reset_index(drop=True)
         # top_10_products.to_csv(f'{self.filePath.replace('Raw', 'bestTen')}', encoding='utf-8-sig')
         
-        df_merge = pd.merge(top_5_products, df_score[['product', 'url', 'main_features','percentOfMainFeatures','PosNegMainFeatures','NegativePercentage','finalFeatureScore']], on=['product', 'url'], how='left')
-        df_top_5_details = df_merge[['product', 'url','average_total_rating', 'average_reviews', 'main_features', 'NegativePercentage', 'percentOfMainFeatures', 'PosNegMainFeatures', 'finalFeatureScore','final_score']]
+        df_merge = pd.merge(top_5_products, df_score[['product', 'url', 'seller', 'price','main_features','percentOfMainFeatures','PosNegMainFeatures','NegativePercentage','finalFeatureScore']], on=['product', 'url'], how='left')
+        df_top_5_details = df_merge[['product', 'url','average_total_rating', 'average_reviews', 'seller', 'price', 'main_features', 'NegativePercentage', 'percentOfMainFeatures', 'PosNegMainFeatures', 'finalFeatureScore','final_score']]
         self.addToExcelSheet(dataFrame=df_top_5_details, sheetName='best5')
         
         return df_top_5_details
